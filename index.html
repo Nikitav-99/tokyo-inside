@@ -37,8 +37,26 @@
 <meta name="twitter:description" content="Изнанка Токио без туристических штампов: киберпанк, арт, урбанистика.">
 <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/18ZPBgnm7tBOTMvYAZXT9pl6shGm7Qkqa">
 
+<!-- Yandex.Metrika counter.
+     Счётчик стоит именно здесь, на самом домене: внутри iframe его куки были бы
+     сторонними, а такие блокирует Safari и ограничивают Chrome с Firefox — из-за
+     этого визиты не доходили. Вебвизор и карта кликов отключены: записывать на
+     этой странице нечего, весь контент внутри фрейма. -->
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accurateTrackBounce: true });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/105466614" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
 <link rel="preconnect" href="https://notebook2.routerjp.netcraze.pro">
 <link rel="dns-prefetch" href="https://notebook2.routerjp.netcraze.pro">
+<link rel="preconnect" href="https://mc.yandex.ru">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
@@ -62,9 +80,20 @@
     "address": { "@type": "PostalAddress", "addressCountry": "JP", "addressLocality": "Токио" }
   },
   "knowsLanguage": ["ru", "en"],
+  "sameAs": ["https://t.me/Unofficial_Tokyo_bot"],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "reservations",
+    "url": "https://t.me/Unofficial_Tokyo_bot",
+    "availableLanguage": ["ru", "en"]
+  },
   "makesOffer": {
     "@type": "Offer",
-    "itemOffered": { "@type": "Service", "serviceType": "Индивидуальные авторские экскурсии по Токио" },
+    "itemOffered": {
+      "@type": "Service",
+      "serviceType": "Индивидуальные авторские экскурсии по Токио",
+      "availableLanguage": { "@type": "Language", "name": "Русский", "alternateName": "ru" }
+    },
     "priceCurrency": "USD",
     "priceSpecification": {
       "@type": "PriceSpecification",
@@ -146,6 +175,75 @@
         "itinerary": { "@type": "City", "name": "Токио" },
         "provider": { "@id": "https://tokyo-inside.art/#org" },
         "offers": { "@type": "Offer", "price": "200", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://tokyo-inside.art/" }
+      }
+    }
+  ]
+}
+</script>
+
+<!-- Вопросы и ответы взяты дословно из блока FAQ на самом сайте.
+     Поисковики умеют показывать их прямо в выдаче раскрывающимся списком. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://tokyo-inside.art/#faq",
+  "inLanguage": "ru",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Это классическая экскурсия с гидом?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Не совсем. Я не провожу лекции в стиле «посмотрите налево, это здание построено в 19 веке». Это авторские прогулки. Мы гуляем, я показываю изнанку города, объясняю, как устроено японское общество, логистика мегаполиса и почему здесь всё так, как есть. Это живой диалог и погружение в атмосферу, а не пересказ Википедии."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Цена указана за человека?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Нет, цена указана за всю группу целиком (фиксированная стоимость за моё время и экспертизу). Неважно, будете вы один или с семьей/друзьями (до 4-5 человек). Я не набираю сборные группы из незнакомых людей — это исключительно ваша приватная прогулка."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Что входит в стоимость? Кто платит за билеты?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "В стоимость входит только сама прогулка. Все дополнительные расходы — входные билеты (в музеи, метро, парки) и питание — оплачиваются вами отдельно. Важный нюанс: по принятой у нас практике, расходы на билеты и транспорт во время прогулки оплачиваются и за участников, и за сопровождающего (гида)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Можно ли с детьми?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Формат прогулок (урбанистика, социальные проблемы, долгие пешие переходы, ночная эстетика) рассчитан на взрослую аудиторию. Детям, скорее всего, будет скучно и утомительно, так как развлекательной программы для них не предусмотрено, поэтому рекомендуется для аудитории не младше 12-14 лет."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Ночная прогулка: где мы заканчиваем?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Обратите внимание: маршрут «Два лица ночного Токио» заканчивается не в центре, а в спальном районе (Мусаси-Урава, Сайтама). Это необходимо для погружения в атмосферу настоящего, нетуристического жилого района. Обратно в отель вы возвращаетесь самостоятельно на поезде (это несложно)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Прогулка по Комбини — это гастро-тур?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Нет. Мы можем что-то купить по ходу дела, но цель прогулки — не дегустация. Мы разбираем, как устроена логистика, почему товары лежат именно так, как работают IT-системы магазинов и как этот бизнес выглядит изнутри."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Я хочу посмотреть классическое искусство.",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "В рамках услуги «Арт-консьерж» я работаю только с современным искусством, дизайном, фото и иллюстрацией. Я не являюсь экспертом в классике (гравюры, буддийские статуи) и не смогу дать вам качественный контекст по этой теме."
       }
     }
   ]
