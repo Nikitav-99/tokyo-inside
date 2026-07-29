@@ -9,6 +9,16 @@
 <meta name="description" content="Авторские прогулки по Токио с русскоговорящим гидом-инсайдером: киберпанк и ночная фотосъёмка, современное искусство и галереи, урбанистика нетуристического города, повседневная Япония. Индивидуальные экскурсии от 160 $.">
 <link rel="canonical" href="https://tokyo-inside.art/">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+
+<!-- Фавикон обязан жить именно здесь: иконку вкладки браузер берёт
+     у внешней страницы и полностью игнорирует то, что прописано
+     внутри iframe. -->
+<link rel="icon" href="/ready_favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/ready_favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/ready_favicons/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/ready_favicons/apple-touch-icon.png">
+<link rel="manifest" href="/ready_favicons/site.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Tokyo Insider">
 <meta name="author" content="Tokyo Insider">
 <meta name="geo.region" content="JP-13">
 <meta name="geo.placename" content="Токио">
@@ -264,6 +274,27 @@
   }
 
   a { color: #9ad2ff; }
+
+  /* Технический признак того, что открыт снимок, а не живой сайт.
+     Нужен в основном админу, поэтому неброский и не перекрывает контент. */
+  #fallback-note {
+    position: fixed;
+    left: 50%;
+    bottom: 8px;
+    transform: translateX(-50%);
+    z-index: 20;
+    display: none;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(5, 0, 16, .8);
+    border: 1px solid rgba(232, 232, 234, .16);
+    color: #9a9aa8;
+    font: 11px/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  #fallback-note.show { display: block; }
 </style>
 </head>
 <body>
@@ -325,19 +356,95 @@
   </div>
 </div>
 
+<div id="fallback-note">резервная копия</div>
+
 <script>
   (function () {
-    var frame = document.getElementById('site');
-    var intro = document.getElementById('intro');
+    // Порядок резервов. Первый — живой сайт с актуальными ценами,
+    // дальше снимок на этом же домене, затем внешняя копия.
+    // NETLIFY_URL пустой — уровень просто пропускается.
+    var NETLIFY_URL = '';
 
-    function hide() {
-      intro.classList.add('hidden');
+    var SOURCES = [
+      { url: 'https://notebook2.routerjp.netcraze.pro/', backup: false },
+      { url: '/backup.html', backup: true }
+    ];
+
+    if (NETLIFY_URL) {
+      SOURCES.push({ url: NETLIFY_URL, backup: true });
     }
 
-    frame.addEventListener('load', hide);
+    var frame = document.getElementById('site');
+    var intro = document.getElementById('intro');
+    var note = document.getElementById('fallback-note');
 
-    // Страховка: не держать заставку вечно, если событие load не пришло.
-    setTimeout(hide, 8000);
+    var current = 0;
+    var settled = false;
+    var watchdog = null;
+
+    function stopWatchdog() {
+      if (watchdog) {
+        clearTimeout(watchdog);
+        watchdog = null;
+      }
+    }
+
+    // Источник ответил: убираем заставку и, если это копия, честно
+    // предупреждаем посетителя.
+    function succeed() {
+      if (settled) return;
+      settled = true;
+      stopWatchdog();
+      intro.classList.add('hidden');
+      if (SOURCES[current].backup) {
+        note.classList.add('show');
+      }
+    }
+
+    // Переход к следующему источнику. Последний оставляем как есть:
+    // даже неудачный он лучше пустого экрана.
+    function fail() {
+      if (settled) return;
+      stopWatchdog();
+      if (current >= SOURCES.length - 1) {
+        succeed();
+        return;
+      }
+      current++;
+      start();
+    }
+
+    function start() {
+      stopWatchdog();
+      // Событие load у cross-origin фрейма приходит даже на странице
+      // ошибки, а при обрыве связи не приходит вовсе — поэтому решение
+      // принимаем по таймауту, а не по нему одному.
+      watchdog = setTimeout(fail, 8000);
+      frame.src = SOURCES[current].url;
+    }
+
+    frame.addEventListener('load', function () {
+      // Первый источник проставлен в разметке, чтобы сайт открывался
+      // и без JavaScript. Здесь просто фиксируем успех.
+      succeed();
+    });
+
+    // Быстрая проверка доступности основного сервера. Ответ непрозрачный
+    // (mode: no-cors), поэтому она ловит обрыв связи и таймаут, но не
+    // отличает 502 от 200 — на этот случай и работает watchdog выше.
+    if (window.fetch && window.AbortController) {
+      var ac = new AbortController();
+      var probeTimer = setTimeout(function () { ac.abort(); }, 4000);
+
+      fetch(SOURCES[0].url, { mode: 'no-cors', cache: 'no-store', signal: ac.signal })
+        .then(function () { clearTimeout(probeTimer); })
+        .catch(function () {
+          clearTimeout(probeTimer);
+          if (!settled && current === 0) fail();
+        });
+    }
+
+    watchdog = setTimeout(fail, 8000);
   })();
 </script>
 
