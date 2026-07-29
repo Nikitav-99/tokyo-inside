@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+    <link rel="icon" href="ready_favicons/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="ready_favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="ready_favicons/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="ready_favicons/apple-touch-icon.png">
+    <link rel="manifest" href="ready_favicons/site.webmanifest">
+    <meta name="theme-color" content="#050010">
+    <meta name="apple-mobile-web-app-title" content="Tokyo Insider">
+
+
+
+
+
+    <!-- SEO & Meta Tags -->
+    <title> Авторские экскурсии в Токио | Tokyo Insider</title>
+    <meta name="description" content="Авторские прогулки по Токио: киберпанк, дизайн, аниме-эстетика и урбанистика. Узнай изнанку Японии с инсайдером.">
+    <meta property="og:title" content="Real Tokyo Tours | Insider">
+    <meta property="og:description" content="Изнанка Токио без туристических штампов. Киберпанк, арт и правда о Японии.">
+    <!-- Картинка для превью -->
+    <meta property="og:image" content="https://lh3.googleusercontent.com/d/18ZPBgnm7tBOTMvYAZXT9pl6shGm7Qkqa">
+    <meta property="og:type" content="website">
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">(function (m, e, t, r, i, k, a) { m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) }; m[i].l = 1 * new Date(); for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } } k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a) })(window, document, 'script', 'https://mc.webvisor.org/metrika/tag_ww.js?id=105466614', 'ym'); ym(105466614, 'init', { ssr: true, webvisor: true, trackHash: true, clickmap: true, ecommerce: "dataLayer", accurateTrackBounce: true, trackLinks: true });</script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/105466614" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+    <!-- SCHEMA.ORG JSON-LD -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "TouristTrip",
+                "name": "Арт-консьерж по выставкам и галереям",
+                "description": "Персональный поиск уникальных выставок современного искусства, дизайна и иллюстрации в Токио.",
+                "offers": { "@type": "Offer", "price": "350", "priceCurrency": "USD" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "TouristTrip",
+                "name": "Токио наоборот: Изнанка мегаполиса",
+                "description": "Урбанистическая прогулка по нетуристическому Токио.",
+                "offers": { "@type": "Offer", "price": "250", "priceCurrency": "USD" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "item": {
+                "@type": "TouristTrip",
+                "name": "Два лица ночного Токио",
+                "description": "Ночная фото-прогулка. Эстетика киберпанка.",
+                "offers": { "@type": "Offer", "price": "250", "priceCurrency": "USD" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "item": {
+                "@type": "TouristTrip",
+                "name": "Повседневная Япония: Комбини и автоматы",
+                "description": "Погружение в быт Токио.",
+                "offers": { "@type": "Offer", "price": "200", "priceCurrency": "USD" }
+              }
+            }
+          ]
+        }
+    </script>
+
+    <!-- 1. Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. React & ReactDOM -->
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+    <!-- 3. Babel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+
+    <!-- Настройка шрифтов и анимаций -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'accordion-down': 'accordionDown 0.3s ease-out',
+                        'accordion-up': 'accordionUp 0.3s ease-out',
+                        'modal-enter': 'modalEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'modal-exit': 'modalExit 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        accordionDown: {
+                            from: { height: '0', opacity: '0' },
+                            to: { height: 'var(--radix-accordion-content-height)', opacity: '1' }
+                        },
+                        accordionUp: {
+                            from: { height: 'var(--radix-accordion-content-height)', opacity: '1' },
+                            to: { height: '0', opacity: '0' }
+                        },
+                        modalEnter: {
+                            '0%': { opacity: '0', transform: 'scale(0.96) translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+                        },
+                        modalExit: {
+                            '0%': { opacity: '1', transform: 'scale(1)', filter: 'blur(0px)' },
+                            '100%': { opacity: '0', transform: 'scale(1.02)', filter: 'blur(10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050010;
+            color: white;
+        }
+        /* Кастомный скроллбар */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0a0118;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+        /* Утилитный класс для предотвращения моргания градиента */
+        .gradient-text-hover {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: white;
+            transition: color 0.3s ease;
+            background-image: linear-gradient(to right, #00f3ff, #bd00ff, #ff0099);
+        }
+
+        .group:hover .gradient-text-hover {
+            color: transparent;
+        }
+
+        .faq-gradient-border {
+            background: linear-gradient(#130826, #130826) padding-box, linear-gradient(45deg, #00f3ff, #bd00ff) border-box;
+            border: 1px solid transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useLayoutEffect, useRef } = React;
+
+        // --- 1. ИКОНКИ ---
+        const IconBase = ({ children, size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
+        );
+        const MapPin = (props) => <IconBase {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></IconBase>;
+        const Clock = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></IconBase>;
+        const Users = (props) => <IconBase {...props}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></IconBase>;
+        const X = (props) => <IconBase {...props}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></IconBase>;
+        const ChevronRight = (props) => <IconBase {...props}><path d="m9 18 6-6-6-6" /></IconBase>;
+        const ChevronLeft = (props) => <IconBase {...props}><path d="m15 18-6-6 6-6" /></IconBase>;
+        const Info = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></IconBase>;
+        const Camera = (props) => <IconBase {...props}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></IconBase>;
+        const ShoppingBag = (props) => <IconBase {...props}><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></IconBase>;
+        const Palette = (props) => <IconBase {...props}><circle cx="13.5" cy="6.5" r=".5" /><circle cx="17.5" cy="10.5" r=".5" /><circle cx="8.5" cy="7.5" r=".5" /><circle cx="6.5" cy="12.5" r=".5" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" /></IconBase>;
+        const Train = (props) => <IconBase {...props}><rect width="16" height="16" x="4" y="3" rx="2" /><path d="M4 11h16" /><path d="M12 3v8" /><path d="m8 19-2 3" /><path d="m18 22-2-3" /><circle cx="8" cy="15" r="1" /><circle cx="16" cy="15" r="1" /></IconBase>;
+        const Moon = (props) => <IconBase {...props}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></IconBase>;
+        const Sparkles = (props) => <IconBase {...props}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275-1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z" /><path d="M5 3v4" /><path d="M9 5H3" /><path d="M19 17v4" /><path d="M21 19h-4" /></IconBase>;
+        const Coffee = (props) => <IconBase {...props}><path d="M17 8h1a4 4 0 1 1 0 8h-1" /><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" /><line x1="6" x2="6" y1="2" y2="4" /><line x1="10" x2="10" y1="2" y2="4" /><line x1="14" x2="14" y1="2" y2="4" /></IconBase>;
+        const ArrowRight = (props) => <IconBase {...props}><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></IconBase>;
+        const CreditCard = (props) => <IconBase {...props}><rect width="20" height="14" x="2" y="5" rx="2" /><line x1="2" x2="22" y1="10" y2="10" /></IconBase>;
+        const HelpCircle = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></IconBase>;
+        const Check = (props) => <IconBase {...props}><polyline points="20 6 9 17 4 12" /></IconBase>;
+        const Ban = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"/><line x1="4.93" x2="19.07" y1="4.93" y2="19.07"/></IconBase>;
+        const ChevronDown = (props) => <IconBase {...props}><path d="m6 9 6 6 6-6"/></IconBase>;
+        const Plus = (props) => <IconBase {...props}><path d="M5 12h14"/><path d="M12 5v14"/></IconBase>;
+        const Minus = (props) => <IconBase {...props}><path d="M5 12h14"/></IconBase>;
+
+
+        const TG_BOT_NAME = 'Unofficial_Tokyo_bot';
+        const getDriveImg = (id) => `https://lh3.googleusercontent.com/d/${id}`;
+
+        // Фотографии
+        const artPhotos = [
+            "16AEbZlZURivsaHvbk79f_p8jpkoycFsp", "1YSr3297syW7mXGxfM-Fz7HeQ6ipzMxP5", "1TzI-QJm3XOXcmG7HEAE15lQ1oBwpRe70",
+            "1zzs-QXfZOJdSZUWiUoGhQQvEoTw8w2z3", "1WpJBLHGbGUUt5imTv3HxKjDu-gcxMtZ1", "1S5RRa9Ne8GC4VDtF1EJxRISBaj4qtZyM",
+            "1IyYLL81pybwDdVo1VXCIv3zJ7kbhTObG", "1QvSw_pROlU6yMcb2OrKK8AKHABcanWcV", "1XxLGqTlh_6Q0VA9RUvPYhGNQ4q0X0SxG",
+            "1-04HUJHoTLedI_tjP2RYlEOWy2ikBHOQ"
+        ].map(getDriveImg);
+
+        const tokyoReversePhotos = [
+            "18ZPBgnm7tBOTMvYAZXT9pl6shGm7Qkqa", "1vGbgdTadcGSuvcAKWHCmlsAjaX8upzGR", "1DmTBhgyP8O8c7dxfiAdfkQpHfUJkBefh",
+            "1v6jvf4REn0E6anDJmxO0PDwV8dH3Y_za", "1pt2qcvMwQANTqJyolFy3pyZLbXwEUGFL", "1nJRHkWhBypK1HwZq0awEl34dPugBstGA",
+            "1f5GjNkX3NULuQ0TdAvNJAO6KHbhbYEnF", "1OAPqGioxYgiHeR2iMS-KyDfwvIbVH_9f", "1ENK87qNttlsmOcLBhwXnVsn_beq58Es5"
+        ].map(getDriveImg);
+
+        const nightPhotos = [
+            "1YkXUejuCMr2bf3K3SOgWrBhHRumHqzIv", "17KbPo-wRq4BG_hXcBjDxfLETiCeXLH7U", "1t5444mtgOUOfnhvDM_izwFm8gpfBjMKK",
+            "1oYwKsRUL4816g1lPcClJ3e_iDHQ1vjh2", "1fEtrSnCxI5eZuqk5Z36jDltD7fB3rL-G", "17sRWryS7geGi1sSdZgGKKIz76Zk1u00G",
+            "1CRgN4Qd7Jt_lYrt6LvMKTYiI26wLKrC2", "1Ga9mS7lSVkQ4KCviSFbHyRWTPCFDYtRT", "10IiOpE8ry-_RwwpQE38phabQOMADNpEc"
+        ].map(getDriveImg);
+
+        const dailyJapanPhotos = [
+            "1mHjHjUjN5whoVpl3my_UqHeKbqhLa4Vk", "1z6NCDmT6VgSkZjnSTJBpwRVv4wXhXUO9", "1dUZzLW2GJxtJpDEEpmdCzB13v3qxvSoG",
+            "1TLAID_zsvL0sspjMI_tc54F3uWiaUJrl", "1DuqOgdNjJruEkXBPvFYfEY0hAMg1T_rN", "15PiX_Qn6ipSKAqhzPAO6D0YbH4W2YJZk"
+        ].map(getDriveImg);
+
+        // --- ДАННЫЕ ЭКСКУРСИЙ ---
+        // UPDATED: IDs now match keys in tours.json for deep linking
+        const toursData = [
+            {
+                id: "ArtCons", // Was: art_concierge
+                title: "Арт-консьерж",
+                subtitle: "Выставки и галереи",
+                shortDesc: "Я найду для вас самые интересные выставки иллюстраторов, фотографов, дизайнеров и медиа-художников. То, что скрыто от глаз обычных туристов.",
+                fullDesc: `❔ Для кого эта услуга?
+Для тех, кто интересуется современным искусством, дизайном и иллюстрацией и хочет увидеть то, что скрыто от глаз обычных туристов.
+
+🔷 Что это такое:
+Я найду для вас самые интересные выставки иллюстраторов, фотографов, дизайнеров и медиа-художников.
+Арт-сцена Токио постоянно меняется. Самые интересные выставки — временные, часто они длятся всего пару недель в небольших, нетуристических галереях. Найти информацию о них, не зная языка и местных ресурсов, почти невозможно.
+Я предлагаю услугу по поиску и сопровождению на такие события. Это не стандартная экскурсия с заранее известным маршрутом, а персональный сервис, который строится вокруг актуальных арт-событий, проходящих именно в даты вашей поездки.
+
+Важный момент: моя специализация — это современное искусство. А вот с классическим искусством — например, гравюрами укиё-э или буддийской скульптурой — я, к сожалению, помочь не смогу, так как не являюсь в этом экспертом и не смогу дать вам достаточный контекст.
+
+❔ Как это работает:
+1) Даты: Вы бронируете услугу и сообщаете мне дни вашего пребывания в Токио.
+2) Поиск: Я исследую анонсы и нахожу 2-3 самые интересные выставки (иногда, может быть и всего одна, всё зависит от конкретной даты).
+3) Согласование: Высылаю вам описание найденных вариантов, и мы вместе решаем, куда именно отправимся.
+4) Организация: Я занимаюсь логистикой: выясняю часы работы, схему проезда, помогаю с покупкой билетов, если это необходимо.
+5) Прогулка: В назначенный день мы встречаемся и идем на выбранное событие. Я делюсь контекстом, при желании мы обсуждаем работы и общую атмосферу.
+
+🔷 Маршрут — каждый раз уникален!
+Маршрут и место встречи полностью зависят от событий, проходящих в городе во время вашего визита.
+
+Например, в начале сентября это мог бы быть такой план:
+⠀• Встреча на станции Уэно.
+⠀• Посещение ежегодного фестиваля искусств Gei-sai в Токийском университете искусств, поиск интересных работ начинающих иллюстраторов.
+⠀• По желанию: Обсуждение увиденного, в кафе на территории кампуса.`,
+                highlights: ["Поиск уникальных временных выставок", "Логистика и билеты на мне", "Контекст и обсуждение работ", "Маршрут строится под даты поездки"],
+                audience: { yes: "Ценителям современного искусства, ищущим уникальный опыт; творческим людям в поисках вдохновения; тем, кто уже был в Токио и хочет чего-то нового.", no: "Если вы в Токио впервые и хотите увидеть главные достопримечательности; если вы предпочитаете заранее знать точный маршрут; если вас интересует классическое японское искусство." },
+                price: 350,
+                duration: "3-4 часа",
+                group: "до 4-5 человек",
+                icon: <Palette className="w-5 h-5" />,
+                images: artPhotos,
+                accentColor: "text-[#ff0099]",
+                bgAccent: "bg-[#ff0099]",
+                borderAccent: "border-[#ff0099]",
+                gradient: "from-[#ff0099] to-[#6600ff]",
+                tags: ["Арт", "Дизайн", "Эксклюзив"],
+                imgPos: "object-[center_50%]"
+            },
+            {
+                id: "Naoborot", // Was: tokyo_reverse
+                title: "Токио наоборот",
+                subtitle: "Изнанка мегаполиса",
+                shortDesc: "Это экскурсия по Токио — городу, который снаружи выглядит как будущее, но внутри живёт по своим, очень старым правилам.",
+                fullDesc: `Это экскурсия по Токио — городу, который снаружи выглядит как будущее, но внутри живёт по своим, очень старым правилам, для тех, кто хочет увидеть его реальную суть, а не открытку для туристов.
+Здесь не будет кучи дат, и информации о том, какие материалы использовались при постройке очередного храма. Вместо этого я покажу, как устроен этот город и как в нём живут обычные люди на самом деле. Поговорим о том, что обычно остаётся за кадром: неписаные правила, быт, социальные парадоксы, и много другое.
+
+🔷 Что будем смотреть и обсуждать:
+⠀• Офисы в Маруноути: Как работают японцы, и почему молодёжь больше не хочет работать там, где их родители могли только мечтать.
+⠀• Японское метро: Разберём неписаные правила поведения в метро: почему здесь все молчат, и как случайно не оказаться в «женском вагоне».
+⠀• Харадзюку: Обсудим, почему местная мода — это не просто стиль, а способ молодёжи выразить протест против строгих правил.
+⠀• Парк Ёёги: Увидим, как парк становится сценой для самовыражения — местом, где японцы могут быть собой, в отличие от строгой атмосферы офисов и метро.
+⠀• Чистота и мусорки: Ответим на главный вопрос туриста: куда японцы девают мусор, если на улицах совсем нет мусорок, но при этом чисто? (не домой)
+⠀• Вежливость и дистанция: Обсудим, почему, несмотря на всю японскую вежливость, здесь легко можно почувствовать себя чужим.`,
+                highlights: ["Офисы Маруноути и культура труда", "Неписаные правила метро", "Протестная мода Харадзюку", "Социальные маски и парк Ёёги", "Загадка чистоты без мусорок", "Японская вежливость и дистанция"],
+                audience: { yes: "Если вы устали от «классических» туров и экскурсий; вам интересны люди и общество, а не только достопримечательности; вы готовы к диалогу и обсуждению, а не к сухой лекции; подойдёт для взрослых и людей от 12-14 лет.", no: "Если вы хотите увидеть главные достопримечательности; вы хотите «классическую» экскурсию, со всеми её минусами и плюсами." },
+                price: 250,
+                duration: "3-4 часа",
+                group: "до 4-5 человек",
+                icon: <Train className="w-5 h-5" />,
+                images: tokyoReversePhotos,
+                accentColor: "text-[#00f3ff]",
+                bgAccent: "bg-[#00f3ff]",
+                borderAccent: "border-[#00f3ff]",
+                gradient: "from-[#00f3ff] to-[#0066ff]",
+                tags: ["Общество", "Урбанистика", "Инсайды"],
+                imgPos: "object-[center_60%]"
+            },
+            {
+                id: "Yofukashi", // Was: two_faces_night
+                title: "Два лица ночного Токио",
+                subtitle: "Киберпанк и меланхолия",
+                shortDesc: "Для ценителей современной городской эстетики и всех, кто хочет увидеть город без дневной суеты.",
+                fullDesc: `❔ Для кого эта экскурсия?
+Для ценителей современной городской эстетики и всех, кто хочет увидеть город без дневной суеты. Если вам близка эстетика киберпанка и городской меланхолии, или вы просто ищете уникальных, нетуристических впечатлений, эта прогулка — для вас.
+
+🔷 Что вас ждет:
+Днем Токио — это деловой и шумный мегаполис. Но когда гаснет солнце и миллионы людей растворяются в поездах метро, город полностью преображается.
+Это экскурсия не о достопримечательностях, а об атмосфере. О той самой тихой, меланхоличной и завораживающей красоте ночного города, знакомой многим по фильмам и аниме. Мы не будем ходить по барам или клубам. Наша цель — найти и прочувствовать атмосферу ночного Токио.
+Я не обещаю вам идеальный кадр или то, что вы сможете увидеть ровно то, что себе представили — всё это зависит только от вашего видения. Моя задача — привести вас в места, которые мне нравятся из-за их атмосферы и высокого визуального потенциала. А что вы в них увидите и захотите запечатлеть, станет уже вашей личной историей.
+
+Глава 1: Стекло, бетон и яркие огни Гиндзы
+⠀• Начинаем на Гиндзе. Вместо хаотичного светового безумия Синдзюку мы погружаемся в совершенно другой мир ночных огней. Здесь царит строгая геометрия, холодный свет, идеальные отражения в стеклянных фасадах бутиков и офисных зданий. Это эстетика корпоративного, богатого, почти стерильного ночного города.
+
+Глава 2: На поезде до спального района
+⠀• Сам переезд — это не потеря времени, а важная часть нашего погружения. Мы сядем на поезд и понаблюдаем, как за окном меняется пейзаж: высотки центра уступают место более скромной застройке, а неоновые вывески сменяются теплым светом из окон жилых домов. Это возможность увидеть ту Японию, где живет большинство людей, но куда редко добираются туристы.
+
+Глава 3: Обычная ночь в спальном районе (Мусаси-Урава)
+⠀• Мы прибываем в совершенно другой мир. Здесь нет гигантских билбордов и толп — лишь тихие улочки, мягкий свет из окон, шум проходящего поезда и одинокие торговые автоматы. Именно эта уникальная атмосфера и послужила реальным прототипом для одного из самых стильных аниме, посвященных красоте ночных прогулок.`,
+                highlights: ["Строгая геометрия ночной Гиндзы", "Атмосферная поездка на поезде", "Тишина и эстетика спальных районов", "Вайб аниме «Yofukashi no Uta»"],
+                audience: { yes: "Фотографам и всем, кто любит снимать (профессионально или на телефон). Ценителям киберпанка, городской меланхолии. Интровертам и тем, кто ищет медитативный опыт.", no: "Если вы ищете ночную жизнь, бары, клубы и вечеринки. Вы хотите посетить конкретные туристические достопримечательности. Вы боитесь тихих и безлюдных улиц." },
+                price: 250,
+                duration: "~4 часа",
+                group: "до 4-5 человек",
+                images: nightPhotos,
+                accentColor: "text-[#bd00ff]",
+                bgAccent: "bg-[#bd00ff]",
+                borderAccent: "border-[#bd00ff]",
+                gradient: "from-[#7000ff] to-[#bd00ff]",
+                tags: ["Фото", "Киберпанк", "Атмосфера"],
+                imgPos: "object-[center_60%]"
+            },
+            {
+                id: "Kombini", // Was: daily_japan
+                title: "Повседневная Япония",
+                subtitle: "Комбини и автоматы",
+                shortDesc: "Как устроена повседневная жизнь: логистика, сезонные продукты и рабочий автомат эпохи Сёва.",
+                fullDesc: `🔷 Что вас жёт:
+В Токио на каждом углу есть комбини и автоматы с напитками. На первый взгляд, они не представляют из себя ничего особенного, и обычно на них не обращаешь внимания, но на самом деле, за ними стоит достаточно много неочевидных решений — от хитрой логистики и анализа огромного количества данных, до странных сезонных продуктов.
+На этой прогулке мы как раз и поговорим об этом. Это не гастро-тур, а просто возможность узнать больше о важной части повседневной жизни в Японии. Я расскажу, как все это устроено, и покажу некоторые, на первый взгляд, неочевидные вещи, а также, один из немногих рабочих торговых автоматов, оставшихся с эпохи Сёва.
+(Также, поговорим например о том, почему онигири треугольные, как система POS-терминалов решает, какой онигири будет лежать на полке завтра утром, почему торговых автоматов в Японии больше, чем где-либо в мире, и при этом они не сломаны, и многом другом)`,
+                highlights: ["Секретная логистика Комбини", "Почему онигири треугольные?", "Рабочий автомат эпохи Сёва", "Как автоматы анализируют данные"],
+                audience: { yes: "Тем, кому интересна не туристическая, а обычная жизнь в Японии, а также, если вам нравится разбираться, как все устроено на самом деле.", no: "Тем, кто ищет экскурсию по храмам и другим достопримечательностям. Если вы ищете тур по ресторанам." },
+                price: 200,
+                duration: "1-2 часа",
+                group: "до 4-5 человек",
+                icon: <ShoppingBag className="w-5 h-5" />,
+                images: dailyJapanPhotos,
+                accentColor: "text-[#ffea00]",
+                bgAccent: "bg-[#ffea00]",
+                borderAccent: "border-[#ffea00]",
+                gradient: "from-orange-600 to-yellow-400",
+                tags: ["Быт", "Технологии", "Детали"],
+                imgPos: "object-[center_60%]"
+            }
+        ];
+
+        // --- Rich Text Renderer Component (REMASTERED) ---
+        const RichText = ({ text, accentColor }) => {
+            let borderColorClass = "border-white";
+            let textColorClass = "text-white";
+            let bgColorClass = "bg-white";
+
+            if (accentColor.includes("ff0099")) { borderColorClass = "border-[#ff0099]"; textColorClass = "text-[#ff0099]"; bgColorClass = "bg-[#ff0099]"; }
+            else if (accentColor.includes("00f3ff")) { borderColorClass = "border-[#00f3ff]"; textColorClass = "text-[#00f3ff]"; bgColorClass = "bg-[#00f3ff]"; }
+            else if (accentColor.includes("bd00ff")) { borderColorClass = "border-[#bd00ff]"; textColorClass = "text-[#bd00ff]"; bgColorClass = "bg-[#bd00ff]"; }
+            else if (accentColor.includes("ffea00")) { borderColorClass = "border-[#ffea00]"; textColorClass = "text-[#ffea00]"; bgColorClass = "bg-[#ffea00]"; }
+
+            return (
+                <div className="space-y-6">
+                    {text.split('\n').map((line, idx) => {
+                        const trimmed = line.trim();
+                        if (!trimmed) return <div key={idx} className="h-2"></div>;
+
+                        // 1. ЗАГОЛОВКИ (Бывшие 🔷) - NEW CYBER STYLE
+                        if (trimmed.includes('🔷')) {
+                            const content = trimmed.replace(/🔷/g, '').trim();
+                            return (
+                                <div key={idx} className="relative mt-10 mb-6 group">
+                                    <h3 className={`text-2xl font-black text-white uppercase tracking-wider relative z-10 pl-6 border-l-4 ${borderColorClass}`}>
+                                        {content}
+                                    </h3>
+                                    {/* Декоративная фоновая полоска */}
+                                    <div className={`absolute top-0 bottom-0 left-0 w-full opacity-5 bg-gradient-to-r from-[${textColorClass}] to-transparent pointer-events-none`}></div>
+                                </div>
+                            );
+                        }
+
+                        // 2. ВОПРОСЫ (Бывшие ❔) - NEW CLEAN STYLE
+                        if (trimmed.includes('❔')) {
+                            const content = trimmed.replace(/❔/g, '').trim();
+                            return (
+                                <div key={idx} className="flex items-start gap-4 mt-8 mb-4">
+                                    <div className={`shrink-0 p-1 rounded-full border ${borderColorClass} ${textColorClass} bg-white/5`}>
+                                        <HelpCircle size={16} />
+                                    </div>
+                                    <h4 className={`text-lg font-bold text-white tracking-wide pt-0.5`}>
+                                        {content}
+                                    </h4>
+                                </div>
+                            );
+                        }
+
+                        // 3. ALERT / IMPORTANT (Бывшие ❕) - MINIMAL STYLE
+                        if (trimmed.includes('❕') || trimmed.includes('Важный момент:')) {
+                            const content = trimmed.replace(/❕/, '').trim();
+                            const displayContent = content.replace('Важный момент:', '').trim();
+                            return (
+                                <div key={idx} className="my-5">
+                                    <p className="text-sm md:text-base text-indigo-100/90 leading-relaxed font-normal">
+                                        <span className={`inline-block font-mono text-xs font-black uppercase tracking-widest mr-2 ${textColorClass} border-b border-dashed ${borderColorClass.replace('border-', 'border-opacity-30 border-')} pb-px`}>
+                                            Важный момент
+                                        </span>
+                                        {displayContent}
+                                    </p>
+                                </div>
+                            );
+                        }
+
+                        // 4. Главы
+                        if (/^Глава \d+:/.test(trimmed)) {
+                            return (
+                                <h4 key={idx} className={`text-lg font-bold text-white mt-8 mb-3 inline-block border-b-2 ${borderColorClass} pb-1`}>
+                                    {trimmed}
+                                </h4>
+                            );
+                        }
+
+                        // 5. Списки - DIGITAL BULLETS
+                        if (trimmed.startsWith('•') || trimmed.startsWith('⠀•') || trimmed.startsWith('-')) {
+                            const content = trimmed.replace(/^[•⠀\s-]+/, '').trim();
+                            return (
+                                <div key={idx} className="flex items-start gap-4 ml-2 mb-3 group hover:translate-x-1 transition-transform duration-300">
+                                    <div className={`w-1.5 h-1.5 mt-2.5 shrink-0 rotate-45 ${bgColorClass}`}></div>
+                                    <span className="text-indigo-100/80 leading-relaxed text-sm md:text-base font-light">{content}</span>
+                                </div>
+                            );
+                        }
+
+                        // 6. Нумерованные списки
+                        if (/^\d+\)/.test(trimmed)) {
+                             const content = trimmed.replace(/^\d+\)\s*/, '').trim();
+                             const number = trimmed.match(/^\d+/)[0];
+                             return (
+                                <div key={idx} className="flex items-start gap-4 ml-1 mb-4">
+                                    <span className={`font-mono text-sm font-bold shrink-0 pt-1 opacity-50 ${textColorClass}`}>0{number}</span>
+                                    <span className="text-indigo-100/80 leading-relaxed text-sm md:text-base font-light">{content}</span>
+                                </div>
+                             );
+                        }
+
+                        // Interactive Tooltips
+                        if (trimmed.includes('В Токио на каждом углу есть комбини')) {
+                             const parts = trimmed.split('комбини');
+                             return (
+                                <p key={idx} className="text-indigo-100/80 leading-8 font-light text-sm md:text-base">
+                                    {parts[0]}
+                                    <span className="group relative inline-block cursor-help border-b border-dashed border-white/40 hover:border-white transition-colors mx-1">
+                                        <span className={`${textColorClass} font-medium`}>комбини</span>
+                                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block px-3 py-1.5 bg-[#1a0b33] border border-white/20 text-white text-xs rounded shadow-xl whitespace-nowrap z-50 backdrop-blur-md animate-fade-in">
+                                            небольшие круглосуточные магазины
+                                        </span>
+                                    </span>
+                                    {parts[1]}
+                                </p>
+                             );
+                        }
+
+                        if (trimmed.includes('эпохи Сёва')) {
+                            const parts = trimmed.split('эпохи Сёва');
+                            return (
+                                <p key={idx} className="text-indigo-100/80 leading-8 font-light text-sm md:text-base">
+                                    {parts[0]}
+                                    <span className="group relative inline-block cursor-help border-b border-dashed border-white/40 hover:border-white transition-colors mx-1">
+                                        <span className={`${textColorClass} font-medium`}>эпохи Сёва</span>
+                                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block px-3 py-1.5 bg-[#1a0b33] border border-white/20 text-white text-xs rounded shadow-xl whitespace-nowrap z-50 backdrop-blur-md animate-fade-in">
+                                            25 дек. 1926 г. – 7 янв. 1989 г.
+                                        </span>
+                                    </span>
+                                    {parts[1]}
+                                </p>
+                            );
+                        }
+
+                        // Quote Block
+                        if (trimmed.startsWith('Это не гастро-тур')) {
+                            return (
+                                <div key={idx} className="my-8 relative">
+                                    <div className={`absolute left-0 top-0 bottom-0 w-1 ${bgColorClass} opacity-50`}></div>
+                                    <p className="pl-6 text-white/90 italic font-medium text-sm md:text-base leading-relaxed">
+                                        "{trimmed}"
+                                    </p>
+                                </div>
+                            );
+                        }
+
+                        // Standard Paragraph
+                        return (
+                            <p key={idx} className="text-indigo-100/80 leading-8 font-light text-sm md:text-base">
+                                {trimmed}
+                            </p>
+                        );
+                    })}
+                </div>
+            );
+        };
+
+        // --- ImageSlider component ---
+        const ImageSlider = ({ images, title, accentColor }) => {
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [isHovered, setIsHovered] = useState(false);
+
+            useEffect(() => {
+                if (images.length <= 1 || isHovered) return;
+                const interval = setInterval(() => {
+                setCurrentIndex((prev) => (prev + 1) % images.length);
+                }, 4000);
+                return () => clearInterval(interval);
+            }, [images, isHovered]);
+
+            const nextSlide = (e) => {
+                e.stopPropagation();
+                setCurrentIndex((prev) => (prev + 1) % images.length);
+            };
+
+            const prevSlide = (e) => {
+                e.stopPropagation();
+                setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+            };
+
+            return (
+                <div
+                className="relative h-64 md:h-full w-full overflow-hidden md:rounded-t-3xl shrink-0 group select-none bg-[#0a0118]"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                >
+                {images.map((img, index) => (
+                    <div
+                    key={index}
+                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out flex items-center justify-center ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+                    >
+                        <div
+                            className="absolute inset-0 bg-cover bg-center opacity-50 blur-xl scale-110"
+                            style={{ backgroundImage: `url(${img})` }}
+                        ></div>
+
+                        <img
+                            src={img}
+                            className="relative z-10 w-full h-full object-contain"
+                            alt={`${title} ${index + 1}`}
+                        />
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0118] via-transparent to-transparent opacity-40 z-20"></div>
+                    </div>
+                ))}
+
+                {images.length > 1 && (
+                    <>
+                    <button onClick={prevSlide} className={`absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 text-white transition-all duration-300 hover:bg-white hover:text-black ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
+                        <ChevronLeft size={24} />
+                    </button>
+                    <button onClick={nextSlide} className={`absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 text-white transition-all duration-300 hover:bg-white hover:text-black ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`}>
+                        <ChevronRight size={24} />
+                    </button>
+                    </>
+                )}
+
+                {images.length > 1 && (
+                    <div className="absolute bottom-4 right-4 flex gap-1.5 z-30">
+                    {images.map((_, idx) => (
+                        <div
+                        key={idx}
+                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer shadow-sm ${idx === currentIndex ? `w-8 bg-white` : `w-2 bg-white/30 hover:bg-white/60`}`}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentIndex(idx);
+                        }}
+                        />
+                    ))}
+                    </div>
+                )}
+                </div>
+            );
+        };
+
+        const Modal = ({ tour, onClose, index, isClosing }) => {
+            if (!tour) return null;
+            // UPDATED: Now uses direct deep link ID without booking_ prefix
+            const tgLink = `https://t.me/${TG_BOT_NAME}?start=${tour.id}`;
+            const displayIndex = (index + 1).toString().padStart(2, '0');
+
+            // Dynamic Colors for highlights and audience
+            let borderColorClass = "border-white";
+            let textColorClass = "text-white";
+            let bgColorClass = "bg-white";
+
+            if (tour.accentColor.includes("ff0099")) { borderColorClass = "border-[#ff0099]"; textColorClass = "text-[#ff0099]"; bgColorClass = "bg-[#ff0099]"; }
+            else if (tour.accentColor.includes("00f3ff")) { borderColorClass = "border-[#00f3ff]"; textColorClass = "text-[#00f3ff]"; bgColorClass = "bg-[#00f3ff]"; }
+            else if (tour.accentColor.includes("bd00ff")) { borderColorClass = "border-[#bd00ff]"; textColorClass = "text-[#bd00ff]"; bgColorClass = "bg-[#bd00ff]"; }
+            else if (tour.accentColor.includes("ffea00")) { borderColorClass = "border-[#ffea00]"; textColorClass = "text-[#ffea00]"; bgColorClass = "bg-[#ffea00]"; }
+
+            return (
+                <div
+                className={`fixed inset-0 z-50 flex items-center justify-center p-0 md:p-6 bg-[#050010]/95 backdrop-blur-xl ${isClosing ? 'animate-modal-exit pointer-events-none' : 'animate-modal-enter'}`}
+                onClick={onClose}
+                >
+                <div
+                    className={`bg-[#130826] w-full md:max-w-5xl h-full md:h-[85vh] md:rounded-[2rem] relative flex flex-col md:flex-row shadow-[0_0_50px_rgba(139,92,246,0.2)] border border-white/10 overflow-hidden ${isClosing ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button
+                    onClick={onClose}
+                    className={`absolute top-4 right-4 z-50 bg-black/50 hover:bg-white text-white hover:text-black p-2 rounded-full transition-all border border-white/20 backdrop-blur-md ${isClosing ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                    >
+                    <X size={24} />
+                    </button>
+
+                    <div className="w-full md:w-1/2 bg-[#0a0118] relative flex flex-col shrink-0 md:border-r border-white/5">
+                    <div className="h-64 md:flex-1 relative bg-[#0a0118]">
+                        <ImageSlider images={tour.images} title={tour.title} accentColor={tour.accentColor} />
+                    </div>
+
+                    <div className="p-6 space-y-6 hidden md:block bg-[#0a0118] border-t border-white/5">
+                        <div className="flex flex-wrap gap-2">
+                            {tour.tags.map((tag, i) => (
+                            <span key={i} className="px-3 py-1 rounded-md border border-white/10 text-xs font-bold uppercase tracking-wider text-white/60">
+                                {tag}
+                            </span>
+                            ))}
+                        </div>
+
+                        <div className="space-y-4">
+                            {[
+                            { icon: Clock, label: "Время", val: tour.duration },
+                            { icon: Users, label: "Группа", val: tour.group },
+                            { icon: null, label: "Цена", val: `$${tour.price}`, highlight: true }
+                            ].map((item, i) => (
+                            <div key={i} className="flex items-center justify-between border-b border-white/5 pb-2">
+                                <div className="flex items-center gap-3 text-white/50 text-sm">
+                                {item.icon && <item.icon size={16} />}
+                                {item.label}
+                                </div>
+                                <div className={`font-mono font-bold ${item.highlight ? tour.accentColor + ' text-xl' : 'text-white'}`}>
+                                {item.val}
+                                </div>
+                            </div>
+                            ))}
+                        </div>
+                    </div>
+                    </div>
+
+                    <div className="flex-1 flex flex-col min-h-0 relative">
+
+                    {/* SCROLL AREA - UPDATED FLEX STRUCTURE */}
+                    <div className="flex-1 overflow-y-auto custom-scrollbar relative">
+                        <div className="flex flex-col min-h-full p-6 md:p-10">
+
+                            <div className="mb-8">
+                                <div className="flex md:hidden flex-wrap gap-3 mb-6">
+                                    <div className="px-3 py-1.5 bg-white/5 rounded border border-white/10 text-xs font-mono text-white flex items-center gap-2">
+                                    <Clock size={12} className="text-white/50" /> {tour.duration}
+                                    </div>
+                                    <div className="px-3 py-1.5 bg-white/5 rounded border border-white/10 text-xs font-mono text-white flex items-center gap-2">
+                                    <Users size={12} className="text-white/50" /> {tour.group}
+                                    </div>
+                                    <div className={`px-3 py-1.5 bg-white/5 rounded border border-white/10 text-xs font-mono font-bold ${tour.accentColor}`}>
+                                    ${tour.price}
+                                    </div>
+                                </div>
+
+                                <div className={`inline-block px-3 py-1 rounded bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-widest mb-3 ${tour.accentColor}`}>
+                                {tour.subtitle}
+                                </div>
+                                <h2 className="text-3xl md:text-4xl font-black text-white leading-tight mb-6 uppercase italic tracking-tighter">
+                                {tour.title}
+                                </h2>
+
+                                {/* Highlights Grid */}
+                                <div className="mb-10">
+                                    <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-4 flex items-center gap-2 opacity-50">
+                                        <Sparkles size={16} /> Highlights
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {tour.highlights.map((h, i) => (
+                                        <div key={i} className={`p-4 rounded-xl border border-white/5 bg-white/5 flex items-start gap-3 hover:bg-white/10 transition-colors duration-300 group`}>
+                                            <div className={`w-1.5 h-1.5 mt-2 rounded-full ${bgColorClass} shadow-[0_0_10px_currentColor] group-hover:scale-125 transition-transform`}></div>
+                                            <span className="text-sm text-indigo-100/90 leading-snug">{h}</span>
+                                        </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="mb-10 relative">
+                                    <div className="absolute -top-20 -right-10 text-[12rem] font-black text-white/5 select-none pointer-events-none overflow-hidden leading-none z-0 font-mono">
+                                        {displayIndex}
+                                    </div>
+
+                                    <div className={`absolute top-1/3 -left-12 w-40 h-40 border-4 ${borderColorClass} opacity-5 rotate-12 rounded-3xl select-none pointer-events-none z-0`}></div>
+
+                                    <div className="relative z-10">
+                                        <RichText text={tour.fullDesc} accentColor={tour.accentColor} />
+                                    </div>
+                                </div>
+
+                                {/* Audience Section */}
+                                <div className="grid gap-4 mb-2">
+                                    {/* YES Block - Uses Tour Color */}
+                                    <div className={`p-5 rounded-2xl border ${borderColorClass.replace('border-', 'border-opacity-20 border-')} bg-opacity-5 ${bgColorClass.replace('bg-', 'bg-opacity-5 bg-')}`}>
+                                        <div className={`flex items-center gap-2 font-bold text-xs uppercase tracking-wider mb-2 ${textColorClass}`}>
+                                            <Check size={16} /> Кому понравится
+                                        </div>
+                                        <p className="text-sm text-indigo-100/80 leading-relaxed font-light">{tour.audience.yes}</p>
+                                    </div>
+
+                                    {/* NO Block - Uses Muted Rose/Gray */}
+                                    <div className="p-5 rounded-2xl border border-white/10 bg-[#0a0118] relative">
+                                        <div className="flex items-center gap-2 text-white/40 font-bold text-xs uppercase tracking-wider mb-2">
+                                            <Ban size={16} /> Не подходит
+                                        </div>
+                                        <p className="text-sm text-white/50 leading-relaxed font-light">{tour.audience.no}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                             {/* Footer Decoration - Yofukashi Style (mt-auto pushes it to bottom) */}
+                            <div className="mt-auto pt-12 relative w-full flex items-end justify-between opacity-80 select-none pointer-events-none pb-2 border-t border-white/5">
+                                {/* Left: Tech info / Signature */}
+                                <div className="flex flex-col gap-0.5 z-10">
+                                     <div className="flex items-center gap-2">
+                                        <div className={`w-2 h-2 rounded-full ${bgColorClass} animate-pulse`}></div>
+                                        <span className="text-[10px] font-mono text-white/30 tracking-[0.2em] uppercase">System.End</span>
+                                     </div>
+                                     <div className={`text-lg font-black italic tracking-tighter uppercase ${textColorClass}`} style={{ textShadow: '0 0 20px rgba(0,0,0,0.5)' }}>
+                                        東京インサイダー
+                                     </div>
+                                </div>
+
+                                {/* Right: The Element User Liked (Big Kanji) */}
+                                <div className="absolute -right-4 -bottom-8 text-9xl font-black text-white/5 italic leading-none z-0 mix-blend-overlay">
+                                    東京
+                                </div>
+
+                                {/* Decorative Barcode/Lines */}
+                                <div className="flex gap-1 mb-1.5 z-10 opacity-30">
+                                    <div className="w-1 h-4 bg-white transform -skew-x-12"></div>
+                                    <div className="w-1 h-4 bg-white transform -skew-x-12"></div>
+                                    <div className="w-0.5 h-4 bg-white transform -skew-x-12"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className="shrink-0 p-6 md:px-10 md:py-6 bg-[#130826]/95 backdrop-blur-xl border-t border-white/10 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.3)]">
+                        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+                            <div className="hidden md:block">
+                                <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1 flex items-center gap-1">
+                                    <CreditCard size={10} /> Оплата
+                                </p>
+                                <p className="text-xs text-white/70 font-medium">Наличные / Перевод</p>
+                            </div>
+
+                            <div className="w-full md:w-auto flex-1 md:max-w-sm flex flex-col gap-2">
+                                <a
+                                href={tgLink}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={`w-full group relative flex items-center justify-center gap-3 py-4 px-6 rounded-xl overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-[${tour.accentColor}]/10`}
+                                >
+                                    <div className={`absolute inset-0 bg-gradient-to-r ${tour.gradient} opacity-100 transition-opacity`}></div>
+                                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay"></div>
+
+                                    <span className="relative z-10 font-black text-white uppercase tracking-widest text-sm md:text-base flex items-center gap-2">
+                                        Забронировать <ArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
+                                    </span>
+                                </a>
+                                <p className="md:hidden text-center text-[10px] text-white/30 uppercase tracking-widest flex items-center justify-center gap-1">
+                                    <Info size={10} /> Оплата наличными на месте
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+                </div>
+            );
+        };
+
+        const TourCard = ({ tour, onClick }) => {
+            return (
+                <div
+                onClick={() => onClick(tour)}
+                className="group relative bg-[#130826] rounded-3xl overflow-hidden cursor-pointer border border-white/5 hover:border-white/20 transition-all duration-500 hover:-translate-y-1 flex flex-col h-full shadow-xl shadow-black/50 transform-gpu isolate"
+                style={{ WebkitMaskImage: "-webkit-radial-gradient(white, black)" }}
+                >
+                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${tour.gradient} z-30`}></div>
+
+                <div className="h-56 relative shrink-0 bg-[#130826] flex items-center justify-center overflow-hidden rounded-t-3xl -mb-px z-0">
+                    <div className="absolute inset-0 bg-[#0a0118]/20 group-hover:bg-transparent transition-colors z-10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#130826] via-transparent to-transparent z-10"></div>
+
+                    <img
+                    src={tour.images[0]}
+                    alt={tour.title}
+                    className={`w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 will-change-transform block ${tour.imgPos || 'object-center'}`}
+                    loading="lazy"
+                    />
+
+                    <div className="absolute top-4 right-4 z-20">
+                    <div className="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        {tour.duration}
+                    </div>
+                    </div>
+                </div>
+
+                <div className="p-6 flex-1 flex flex-col relative z-20 bg-[#130826]">
+                    <div className="mb-4">
+                    <div className={`text-xs font-bold tracking-widest uppercase mb-2 ${tour.accentColor}`}>
+                        {tour.subtitle}
+                    </div>
+                    {/* Исправленный заголовок с градиентом без моргания */}
+                    <h3 className="text-2xl font-black leading-none mb-3 uppercase italic tracking-tight gradient-text-hover pr-4">
+                        {tour.title}
+                    </h3>
+                    </div>
+
+                    <p className="text-indigo-100/80 text-sm line-clamp-4 mb-6 font-light leading-relaxed">
+                    {tour.shortDesc}
+                    </p>
+
+                    <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+                    <div>
+                        <span className="block text-[10px] text-white/30 uppercase tracking-wider">Стоимость</span>
+                        <span className="text-lg font-bold text-white font-mono">${tour.price}</span>
+                    </div>
+                    <div className={`w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform border border-white/5 group-hover:border-white/20`}>
+                        <ChevronRight size={20} className="text-white/50 group-hover:text-white transition-colors" />
+                    </div>
+                    </div>
+                </div>
+                </div>
+            );
+        };
+
+        // --- FAQ COMPONENT ---
+        const FAQItem = ({ question, answer, isOpen, onClick, index }) => {
+            // Форматирование текста: выделяем ключевые фразы
+            const formatAnswer = (text) => {
+                const keywords = ["Это авторские прогулки", "фиксированная стоимость", "дополнительные расходы", "взрослую аудиторию", "заканчивается не в центре", "не дегустация", "современным искусством"];
+
+                let formatted = text;
+                keywords.forEach(key => {
+                    formatted = formatted.replace(key, `**${key}**`);
+                });
+
+                return formatted.split(/(\*\*.*?\*\*)/).map((part, i) => {
+                    if (part.startsWith('**') && part.endsWith('**')) {
+                        return <strong key={i} className="text-[#00f3ff] font-medium">{part.slice(2, -2)}</strong>;
+                    }
+                    return part;
+                });
+            };
+
+            return (
+                <div className="mb-4 group">
+                    <button
+                        onClick={onClick}
+                        className={`w-full flex items-center justify-between p-6 text-left transition-all duration-300 rounded-2xl border bg-[#130826] relative overflow-hidden ${
+                            isOpen
+                            ? 'border-[#00f3ff]/50 shadow-[0_0_20px_rgba(0,243,255,0.15)]'
+                            : 'border-white/5 hover:border-white/20 hover:bg-[#1a0b33]'
+                        }`}
+                    >
+                         {/* Декоративный фон для активного состояния */}
+                         {isOpen && <div className="absolute inset-0 bg-gradient-to-r from-[#00f3ff]/5 to-transparent opacity-100 transition-opacity"></div>}
+
+                        <div className="flex items-center gap-4 relative z-10 pr-4">
+                            <span className={`font-mono text-sm tracking-widest transition-colors ${isOpen ? 'text-[#ff0099]' : 'text-white/30'}`}>
+                                0{index + 1}
+                            </span>
+                            <h3 className={`font-bold md:text-lg transition-colors ${isOpen ? 'text-white' : 'text-indigo-100/80'}`}>
+                                {question}
+                            </h3>
+                        </div>
+
+                        <div className={`relative z-10 w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 shrink-0 ${
+                            isOpen
+                            ? 'border-[#00f3ff] bg-[#00f3ff] text-black rotate-180'
+                            : 'border-white/20 text-white/50 group-hover:border-white group-hover:text-white'
+                        }`}>
+                            <ChevronDown size={18} />
+                        </div>
+                    </button>
+
+                    <div
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+                    >
+                        <div className="p-6 pt-2 pl-16 text-indigo-100/70 leading-relaxed font-light text-sm md:text-base border-l border-white/5 ml-8 mt-2">
+                             {formatAnswer(answer)}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const FAQSection = () => {
+            const [openIndex, setOpenIndex] = useState(null);
+
+            const faqData = [
+                {
+                    q: "Это классическая экскурсия с гидом?",
+                    a: "Не совсем. Я не провожу лекции в стиле «посмотрите налево, это здание построено в 19 веке». Это авторские прогулки. Мы гуляем, я показываю изнанку города, объясняю, как устроено японское общество, логистика мегаполиса и почему здесь всё так, как есть. Это живой диалог и погружение в атмосферу, а не пересказ Википедии."
+                },
+                {
+                    q: "Цена указана за человека?",
+                    a: "Нет, цена указана за всю группу целиком (фиксированная стоимость за моё время и экспертизу). Неважно, будете вы один или с семьей/друзьями (до 4-5 человек). Я не набираю сборные группы из незнакомых людей — это исключительно ваша приватная прогулка."
+                },
+                {
+                    q: "Что входит в стоимость? Кто платит за билеты?",
+                    a: "В стоимость входит только сама прогулка. Все дополнительные расходы — входные билеты (в музеи, метро, парки) и питание — оплачиваются вами отдельно. Важный нюанс: по принятой у нас практике, расходы на билеты и транспорт во время прогулки оплачиваются и за участников, и за сопровождающего (гида)."
+                },
+                {
+                    q: "Можно ли с детьми?",
+                    a: "Формат прогулок (урбанистика, социальные проблемы, долгие пешие переходы, ночная эстетика) рассчитан на взрослую аудиторию. Детям, скорее всего, будет скучно и утомительно, так как развлекательной программы для них не предусмотрено, поэтому рекомендуется для аудитории не младше 12-14 лет."
+                },
+                {
+                    q: "Ночная прогулка: где мы заканчиваем?",
+                    a: "Обратите внимание: маршрут «Два лица ночного Токио» заканчивается не в центре, а в спальном районе (Мусаси-Урава, Сайтама). Это необходимо для погружения в атмосферу настоящего, нетуристического жилого района. Обратно в отель вы возвращаетесь самостоятельно на поезде (это несложно)."
+                },
+                {
+                    q: "Прогулка по Комбини — это гастро-тур?",
+                    a: "Нет. Мы можем что-то купить по ходу дела, но цель прогулки — не дегустация. Мы разбираем, как устроена логистика, почему товары лежат именно так, как работают IT-системы магазинов и как этот бизнес выглядит изнутри."
+                },
+                {
+                    q: "Я хочу посмотреть классическое искусство.",
+                    a: "В рамках услуги «Арт-консьерж» я работаю только с современным искусством, дизайном, фото и иллюстрацией. Я не являюсь экспертом в классике (гравюры, буддийские статуи) и не смогу дать вам качественный контекст по этой теме."
+                }
+            ];
+
+            return (
+                <section className="relative z-20 mt-32 mb-20">
+                     {/* Decorative Background Blur */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-64 bg-[#bd00ff]/10 blur-[100px] pointer-events-none -z-10"></div>
+
+                    <div className="flex flex-col items-center mb-16 text-center relative">
+                        {/* Magazine Style Header Group */}
+                        <div className="relative inline-block">
+                            {/* 1. The "Vibe" Layer (English) - Huge & Graphical */}
+                            <h2 className="text-[8rem] md:text-[12rem] font-black text-[#2a1b3d] select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 leading-none opacity-50 italic tracking-tighter font-mono">
+                                FAQ
+                            </h2>
+
+                            {/* 2. The "Trust" Layer (Russian) - Sharp & Readable - CYBER PANE */}
+                            <div className="relative z-10 inline-block">
+                                <div className="border-2 border-[#00f3ff] bg-[#050010]/80 backdrop-blur-md px-8 py-4 transform -skew-x-12 shadow-[5px_5px_0px_#bd00ff] hover:shadow-[8px_8px_0px_#ff0099] transition-all duration-300">
+                                     <h2 className="text-2xl md:text-4xl font-black text-white uppercase italic tracking-tight transform skew-x-12">
+                                        ЧАСТЫЕ ВОПРОСЫ
+                                    </h2>
+                                </div>
+
+                                {/* Decorative small text */}
+                                <div className="mt-4 flex justify-center gap-4 text-[10px] font-mono text-[#bd00ff] tracking-[0.3em] uppercase">
+                                    <span>// System.Info</span>
+                                    <span>// Guide.Help</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="max-w-3xl mx-auto">
+                        {faqData.map((item, index) => (
+                            <FAQItem
+                                key={index}
+                                question={item.q}
+                                answer={item.a}
+                                index={index}
+                                isOpen={openIndex === index}
+                                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Декоративный элемент внизу списка */}
+                    <div className="flex justify-center mt-12 opacity-30 gap-2">
+                        <div className="w-16 h-1 bg-white/20"></div>
+                        <div className="w-4 h-1 bg-[#ff0099]"></div>
+                         <div className="w-16 h-1 bg-white/20"></div>
+                    </div>
+                </section>
+            );
+        };
+
+        function App() {
+            const [selectedTour, setSelectedTour] = useState(null);
+            const [isClosing, setIsClosing] = useState(false);
+            const timerRef = useRef(null); // Store the timer ID
+
+            // Обработка кнопки "Назад" и прокрутки страницы
+            useLayoutEffect(() => {
+                // Helper to handle padding
+                const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+                const nav = document.querySelector('nav'); // Находим навигацию
+
+                if (selectedTour) {
+                    // 1. Блокируем скролл
+                    document.body.style.paddingRight = `${scrollbarWidth}px`;
+                    document.body.style.overflow = 'hidden';
+                    // Фикс для фиксированной шапки (чтобы не дергалась)
+                    if (nav) nav.style.paddingRight = `${scrollbarWidth}px`;
+
+                    window.history.pushState({ modalOpen: true }, '');
+                } else {
+                    // 2. Возвращаем как было (только когда модалка полностью исчезла)
+                    document.body.style.paddingRight = '0px';
+                    document.body.style.overflow = 'unset';
+                    // Сброс для шапки
+                    if (nav) nav.style.paddingRight = '0px';
+                }
+
+                // Обработчик события popstate (нажатие "Назад")
+                const handlePopState = () => {
+                    if (selectedTour) {
+                        handleCloseModal();
+                    }
+                };
+
+                window.addEventListener('popstate', handlePopState);
+
+                return () => {
+                    window.removeEventListener('popstate', handlePopState);
+                };
+            }, [selectedTour]);
+
+            const handleCloseModal = () => {
+                setIsClosing(true);
+                timerRef.current = setTimeout(() => {
+                    setSelectedTour(null);
+                    setIsClosing(false);
+                    timerRef.current = null;
+                }, 500); // Длительность анимации закрытия (0.5s)
+            };
+
+            const onTourSelect = (tour) => {
+                // If we are in the middle of closing, cancel it immediately
+                if (timerRef.current) {
+                    clearTimeout(timerRef.current);
+                    timerRef.current = null;
+                }
+                setIsClosing(false); // Reset closing state
+                setSelectedTour(tour); // Open new tour
+            };
+
+            return (
+                <div className="min-h-screen bg-[#050010] text-indigo-100 font-sans selection:bg-[#bd00ff] selection:text-white overflow-x-hidden">
+
+                <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+                    <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-[#4c00ff]/10 rounded-full blur-[150px]"></div>
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#00f3ff]/5 rounded-full blur-[150px]"></div>
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+                </div>
+
+                <nav className="fixed w-full z-40 top-0 bg-[#050010]/80 backdrop-blur-md border-b border-white/5">
+                    <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <div className="relative">
+                        <Moon size={20} className="text-[#ffea00] fill-[#ffea00]" />
+                        <div className="absolute inset-0 bg-[#ffea00] blur-md opacity-40"></div>
+                        </div>
+                        <span className="font-black text-xl tracking-tighter text-white italic">
+                        REAL<span className="text-[#bd00ff]">TOKYO</span>
+                        </span>
+                    </div>
+                    {/* Updated Link to Individual Request */}
+                    <a
+                        href={`https://t.me/${TG_BOT_NAME}?start=Individual`}
+                        target="_blank"
+                        className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-white uppercase tracking-wider hover:bg-white/10 hover:border-[#00f3ff]/50 transition-all"
+                    >
+                        <Coffee size={14} className="text-[#00f3ff]" /> Связаться
+                    </a>
+                    </div>
+                </nav>
+
+                <header className="relative pt-32 pb-20 px-4 text-center z-10 overflow-hidden flex flex-col items-center justify-center">
+                    <div className="absolute top-20 left-10 w-20 h-20 border-4 border-[#ff0099] opacity-20 rotate-12 hidden md:block"></div>
+                    <div className="absolute bottom-10 right-10 w-32 h-32 border-4 border-[#00f3ff] opacity-20 -rotate-6 rounded-full hidden md:block"></div>
+
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#bd00ff]/30 bg-[#bd00ff]/10 text-[#bd00ff] text-[10px] font-bold uppercase tracking-[0.2em] mb-6">
+                    <Sparkles size={12} /> Authentic Experience
+                    </div>
+
+                    <div className="flex flex-col items-center mb-6">
+                        <span className="text-white text-2xl md:text-5xl font-bold tracking-[0.4em] uppercase mb-2 md:mb-4 ml-2 opacity-90">
+                            TOKYO
+                        </span>
+
+                        <h1 className="text-6xl md:text-9xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-[#00f3ff] via-[#bd00ff] to-[#ff0099] leading-none pb-2 pr-6">
+                            INSIDER
+                        </h1>
+
+                        <div className="flex items-center gap-4 mt-4">
+                            <div className="h-px w-8 md:w-16 bg-[#00f3ff]/50"></div>
+                            <span className="text-white/60 font-mono text-xs md:text-sm tracking-widest">
+                                東京インサイダー
+                            </span>
+                            <div className="h-px w-8 md:w-16 bg-[#ff0099]/50"></div>
+                        </div>
+                    </div>
+
+                    <p className="text-base md:text-lg text-indigo-200/80 max-w-xl mx-auto leading-relaxed mb-10 font-light">
+                    Изнанка города для тех, кто ненавидит «туристические» места. <br/>
+                    Киберпанк, арт, урбанистика и правда о Японии.
+                    </p>
+
+                    <div className="flex flex-wrap justify-center gap-4">
+                    {['Cyberpunk', 'Underground', 'Art', 'NO FILTERS'].map((tag, i) => (
+                        <div key={i} className="px-4 py-2 bg-[#130826] border border-white/10 text-xs font-bold uppercase tracking-widest text-white hover:border-[#ffea00] hover:text-[#ffea00] transition-colors cursor-default transform -skew-x-12">
+                        <div className="skew-x-12">{tag}</div>
+                        </div>
+                    ))}
+                    </div>
+                </header>
+
+                <main className="max-w-6xl mx-auto px-4 pb-12 relative z-10">
+                    <div className="flex items-center gap-4 mb-12">
+                    <div className="w-2 h-8 bg-[#ff0099] transform -skew-x-12"></div>
+                    <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter">
+                        Каталог <span className="text-white/20">04</span>
+                    </h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 auto-rows-fr">
+                    {toursData.map((tour, index) => (
+                        <TourCard key={tour.id} tour={tour} onClick={() => onTourSelect({ ...tour, index })} />
+                    ))}
+                    </div>
+
+                    <div className="mt-32 relative rounded-[2rem] p-8 md:p-12 border border-white/10 overflow-hidden bg-[#130826] group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#bd00ff]/20 via-transparent to-[#00f3ff]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+                        <div>
+                        <h3 className="text-2xl md:text-4xl font-black text-white mb-4 uppercase italic">Индивидуальный запрос?</h3>
+                        <p className="text-indigo-200/80 max-w-md text-sm leading-relaxed">
+                            Я не вожу людей по барам и в толпы туристов. Но если вы ищете уникальный маршрут под ваши интересы (аниме-локации, скрытая архитектура) — пишите.
+                        </p>
+                        </div>
+                        {/* Updated Link to Individual Request */}
+                        <a
+                        href={`https://t.me/${TG_BOT_NAME}?start=Individual`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="shrink-0 bg-white text-black px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm hover:bg-[#00f3ff] transition-colors shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                        >
+                        Написать в Telegram
+                        </a>
+                    </div>
+                    </div>
+
+                    {/* FAQ SECTION INSERTED HERE */}
+                    <FAQSection />
+
+                </main>
+
+                <footer className="border-t border-white/5 py-12 bg-[#020005] text-center relative z-10">
+                    <div className="flex justify-center gap-6 mb-8 opacity-50">
+                    <Palette size={20} />
+                    <Train size={20} />
+                    <Camera size={20} />
+                    </div>
+                    <div className="text-white/30 text-xs font-mono uppercase tracking-widest">
+                    © {new Date().getFullYear()} Unofficial Tokyo Guide
+                    </div>
+                </footer>
+
+                {selectedTour && (
+                    <Modal tour={selectedTour} index={selectedTour.index} onClose={handleCloseModal} isClosing={isClosing} />
+                )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
