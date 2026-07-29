@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
+# Снимок сайта на случай недоступности основного сервера.
+# Закрыт, чтобы не индексировался как дубль главной страницы.
+Disallow: /backup.html
 
 Sitemap: https://tokyo-inside.art/sitemap.xml
 Host: tokyo-inside.art
