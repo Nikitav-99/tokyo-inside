@@ -9,6 +9,9 @@
 <meta name="description" content="Авторские прогулки по Токио с русскоговорящим гидом-инсайдером: киберпанк и ночная фотосъёмка, современное искусство и галереи, урбанистика нетуристического города, повседневная Япония. Индивидуальные экскурсии от 160 $.">
 <link rel="canonical" href="https://tokyo-inside.art/">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="author" content="Tokyo Insider">
+<meta name="geo.region" content="JP-13">
+<meta name="geo.placename" content="Токио">
 
 <!-- Фавикон обязан жить именно здесь: иконку вкладки браузер берёт
      у внешней страницы и полностью игнорирует то, что прописано
@@ -19,9 +22,6 @@
 <link rel="apple-touch-icon" href="/ready_favicons/apple-touch-icon.png">
 <link rel="manifest" href="/ready_favicons/site.webmanifest">
 <meta name="apple-mobile-web-app-title" content="Tokyo Insider">
-<meta name="author" content="Tokyo Insider">
-<meta name="geo.region" content="JP-13">
-<meta name="geo.placename" content="Токио">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://tokyo-inside.art/">
@@ -39,6 +39,9 @@
 
 <link rel="preconnect" href="https://notebook2.routerjp.netcraze.pro">
 <link rel="dns-prefetch" href="https://notebook2.routerjp.netcraze.pro">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
 
 <!-- Кто мы: тип бизнеса, регион, язык. Именно этот блок отвечает
      на вопрос поисковика «что это за сайт». -->
@@ -154,7 +157,9 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    background: #050010;
+    background-color: #050010;
+    color: white;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow: hidden;
   }
 
@@ -168,112 +173,204 @@
     display: block;
   }
 
-  /* Экран загрузки. Это не пустой спиннер, а настоящее описание
-     сервиса: посетитель видит его, пока грузится iframe, а поисковик
-     получает осмысленный текст прямо из HTML, без JavaScript. */
-  #intro {
+  /* ===== Экран загрузки — перенесён с самого сайта (версия «копия v5»),
+     чтобы обёртка выглядела так же, как приложение. ===== */
+  #loader {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow-y: auto;
-    box-sizing: border-box;
-    padding: 40px 24px;
-    background: #050010;
-    color: #e8e8ea;
-    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #050010;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
     transition: opacity .4s ease;
-    z-index: 10;
   }
 
-  #intro.hidden {
-    opacity: 0;
+  /* Vignette & Grid */
+  #loader::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, transparent 0%, #050010 90%);
+    z-index: 1;
     pointer-events: none;
   }
 
-  .wrap {
-    max-width: 44em;
-    margin: 0 auto;
+  #loader::after {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    background-image:
+      linear-gradient(rgba(189, 0, 255, 0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 243, 255, 0.15) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(500px) rotateX(60deg);
+    animation: grid-move 5s linear infinite;
+    z-index: -1;
+    opacity: 0.6;
+    mask-image: radial-gradient(circle at center, black 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 70%);
   }
 
-  #intro h1 {
-    font-size: clamp(24px, 5vw, 38px);
-    line-height: 1.2;
-    margin: 0 0 .5em;
-    letter-spacing: -.01em;
+  @keyframes grid-move {
+    0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+    100% { transform: perspective(500px) rotateX(60deg) translateY(60px); }
   }
 
-  #intro h2 {
-    font-size: clamp(17px, 3vw, 21px);
-    margin: 2em 0 .8em;
-    color: #fff;
-  }
-
-  #intro h3 {
-    font-size: 16px;
-    margin: 0 0 .3em;
-    color: #fff;
-  }
-
-  #intro p {
-    color: #b9b9c4;
-    margin: 0 0 1em;
-  }
-
-  .tours {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 14px;
-  }
-
-  .tours li {
-    border: 1px solid rgba(232, 232, 234, .14);
-    border-radius: 10px;
-    padding: 14px 16px;
-  }
-
-  .tours p {
-    margin: 0;
-    font-size: 15px;
-  }
-
-  .price {
-    display: inline-block;
-    margin-top: .5em;
-    font-size: 14px;
-    color: #9ad2ff;
-  }
-
-  .status {
+  /* CYBER STAR */
+  .loader-content {
+    position: relative;
+    z-index: 10;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 28px;
+    padding: 20px;
+  }
+
+  .cyber-star {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .star-core {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(from 0deg, #00f3ff, #bd00ff, #ff0099, #00f3ff);
+    clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
+    animation: star-spin 3s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(189, 0, 255, 0.6));
+  }
+
+  .star-core::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    background: #050010;
+    clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
+  }
+
+  .star-inner {
+    position: absolute;
+    width: 25%;
+    height: 25%;
+    background: #fff;
+    transform: rotate(45deg);
+    animation: pulse-star 0.5s ease-in-out infinite alternate;
+    box-shadow: 0 0 20px #00f3ff;
+  }
+
+  /* Glitch Text */
+  .loader-title {
+    font-size: 42px;
+    font-weight: 900;
+    color: white;
+    font-style: italic;
+    letter-spacing: -2px;
+    text-transform: uppercase;
+    position: relative;
+    text-shadow: 4px 4px 0px #bd00ff;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .loader-subtitle {
     font-size: 14px;
-    color: #8a8a99;
+    color: #00f3ff;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 40px;
+    animation: blink 0.1s infinite;
+    opacity: 0.8;
   }
 
-  .spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(232, 232, 234, .22);
-    border-top-color: #e8e8ea;
-    border-radius: 50%;
-    animation: spin .9s linear infinite;
-    flex: 0 0 auto;
+  /* Warning Box - Cyber Style */
+  .loader-warning {
+    background: rgba(10, 1, 24, 0.9);
+    border: 1px solid #ff0099;
+    padding: 20px 30px;
+    max-width: 420px;
+    text-align: left;
+    position: relative;
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 20px),
+      calc(100% - 20px) 100%,
+      0 100%
+    );
+    box-shadow: 0 0 30px rgba(255, 0, 153, 0.1);
+    animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards;
   }
 
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-warning::before {
+    content: 'SYSTEM ALERT // RKN_BLOCK';
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #ff0099;
+    color: #000;
+    font-size: 9px;
+    padding: 2px 8px;
+    font-weight: 900;
+    letter-spacing: 1px;
+  }
+
+  .warning-text {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #e0e0e0;
+  }
+
+  .warning-text b {
+    color: #00f3ff;
+    font-weight: bold;
+  }
+
+  @keyframes star-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes pulse-star {
+    from { transform: scale(0.8) rotate(45deg); opacity: 0.5; }
+    to { transform: scale(1.2) rotate(45deg); opacity: 1; }
+  }
+
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0.7; }
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .loader-title { font-size: 30px; }
+    .loader-subtitle { letter-spacing: 4px; font-size: 12px; }
+    .cyber-star { width: 90px; height: 90px; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .spinner { animation-duration: 3s; }
-    #intro { transition: none; }
+    .star-core, .star-inner, .loader-subtitle { animation: none; }
+    #loader::after { animation: none; }
   }
-
-  a { color: #9ad2ff; }
 
   /* Технический признак того, что открыт снимок, а не живой сайт.
      Нужен в основном админу, поэтому неброский и не перекрывает контент. */
@@ -289,7 +386,7 @@
     background: rgba(5, 0, 16, .8);
     border: 1px solid rgba(232, 232, 234, .16);
     color: #9a9aa8;
-    font: 11px/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font: 11px/1.3 'JetBrains Mono', monospace;
     white-space: nowrap;
     pointer-events: none;
   }
@@ -306,76 +403,58 @@
   allow="clipboard-write; geolocation; fullscreen; payment"
   referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-<div id="intro">
-  <div class="wrap">
-
-    <div class="status">
-      <div class="spinner"></div>
-      <span>Загружаем сайт… Если он не открылся —
-        <a href="https://notebook2.routerjp.netcraze.pro/" rel="noopener">перейти напрямую</a>.</span>
+<div id="loader">
+  <div class="loader-content">
+    <div class="cyber-star">
+      <div class="star-core"></div>
+      <div class="star-inner"></div>
     </div>
 
-    <h1>Авторские экскурсии в Токио с гидом-инсайдером</h1>
+    <div class="loader-title">TOKYO INSIDER</div>
+    <div class="loader-subtitle">SYSTEM INITIALIZATION</div>
 
-    <p>Tokyo Insider — индивидуальные прогулки по Токио на русском языке для тех,
-      кому неинтересны стандартные туристические маршруты. Киберпанк и ночная
-      фотография, современное искусство и частные галереи, урбанистика спальных
-      районов, повседневный быт японцев: комбини, торговые автоматы, местные бары.</p>
-
-    <h2>Экскурсии</h2>
-
-    <ul class="tours">
-      <li>
-        <h3>Арт-консьерж по выставкам и галереям</h3>
-        <p>Персональный поиск уникальных выставок современного искусства, дизайна
-          и иллюстрации в Токио.</p>
-        <span class="price">от 280 $</span>
-      </li>
-      <li>
-        <h3>Токио наоборот: изнанка мегаполиса</h3>
-        <p>Урбанистическая прогулка по нетуристическому Токио.</p>
-        <span class="price">от 200 $</span>
-      </li>
-      <li>
-        <h3>Два лица ночного Токио</h3>
-        <p>Ночная фото-прогулка по городу в эстетике киберпанка.</p>
-        <span class="price">от 200 $</span>
-      </li>
-      <li>
-        <h3>Повседневная Япония: комбини и автоматы</h3>
-        <p>Погружение в быт Токио — то, как город живёт на самом деле.</p>
-        <span class="price">от 160 $</span>
-      </li>
-    </ul>
-
-    <h2>Индивидуальный запрос</h2>
-    <p>Маршрут можно собрать под свои интересы — от аниме-локаций и архитектуры
-      до гастрономии и барахолок. Все детали, программы и бронирование —
-      на <a href="https://notebook2.routerjp.netcraze.pro/" rel="noopener">основной странице сайта</a>.</p>
-
+    <div class="loader-warning">
+      <div class="warning-text">
+        Если загрузка зависла — вероятно, <b>РКН блокирует соединение</b>.<br/>
+        Пожалуйста, включите <b>VPN</b> для доступа к сайту.
+      </div>
+    </div>
   </div>
 </div>
 
 <div id="fallback-note">резервная копия</div>
 
+<!-- Текстовая версия для поисковиков и браузеров без JavaScript.
+     Основную работу делает разметка JSON-LD выше. -->
+<noscript>
+  <h1>Авторские экскурсии в Токио с гидом-инсайдером</h1>
+  <p>Tokyo Insider — индивидуальные прогулки по Токио на русском языке: киберпанк
+    и ночная фотография, современное искусство и частные галереи, урбанистика
+    нетуристических районов, повседневный быт японцев.</p>
+  <h2>Экскурсии</h2>
+  <ul>
+    <li><b>Арт-консьерж по выставкам и галереям</b> — персональный поиск уникальных
+      выставок современного искусства, дизайна и иллюстрации. От 280 $.</li>
+    <li><b>Токио наоборот: изнанка мегаполиса</b> — урбанистическая прогулка
+      по нетуристическому Токио. От 200 $.</li>
+    <li><b>Два лица ночного Токио</b> — ночная фото-прогулка в эстетике киберпанка. От 200 $.</li>
+    <li><b>Повседневная Япония: комбини и автоматы</b> — погружение в быт города. От 160 $.</li>
+  </ul>
+  <p><a href="https://notebook2.routerjp.netcraze.pro/">Открыть сайт напрямую</a></p>
+</noscript>
+
 <script>
   (function () {
-    // Порядок резервов. Первый — живой сайт с актуальными ценами,
-    // дальше снимок на этом же домене, затем внешняя копия.
-    // NETLIFY_URL пустой — уровень просто пропускается.
-    var NETLIFY_URL = '';
-
+    // Порядок резервов: живой сайт с актуальными ценами, затем снимок
+    // на этом же домене, затем внешняя копия.
     var SOURCES = [
       { url: 'https://notebook2.routerjp.netcraze.pro/', backup: false },
-      { url: '/backup.html', backup: true }
+      { url: '/backup.html', backup: true },
+      { url: 'https://sparkly-nasturtium-ec39c2.netlify.app/', backup: true }
     ];
 
-    if (NETLIFY_URL) {
-      SOURCES.push({ url: NETLIFY_URL, backup: true });
-    }
-
     var frame = document.getElementById('site');
-    var intro = document.getElementById('intro');
+    var loader = document.getElementById('loader');
     var note = document.getElementById('fallback-note');
 
     var current = 0;
@@ -389,13 +468,14 @@
       }
     }
 
-    // Источник ответил: убираем заставку и, если это копия, честно
-    // предупреждаем посетителя.
+    // Источник ответил: убираем экран загрузки и, если открыт снимок,
+    // помечаем это для админа.
     function succeed() {
       if (settled) return;
       settled = true;
       stopWatchdog();
-      intro.classList.add('hidden');
+      loader.style.opacity = '0';
+      setTimeout(function () { loader.style.display = 'none'; }, 400);
       if (SOURCES[current].backup) {
         note.classList.add('show');
       }
@@ -411,27 +491,20 @@
         return;
       }
       current++;
-      start();
-    }
-
-    function start() {
       stopWatchdog();
-      // Событие load у cross-origin фрейма приходит даже на странице
-      // ошибки, а при обрыве связи не приходит вовсе — поэтому решение
-      // принимаем по таймауту, а не по нему одному.
       watchdog = setTimeout(fail, 8000);
       frame.src = SOURCES[current].url;
     }
 
     frame.addEventListener('load', function () {
-      // Первый источник проставлен в разметке, чтобы сайт открывался
-      // и без JavaScript. Здесь просто фиксируем успех.
+      // Первый источник проставлен прямо в разметке, чтобы сайт
+      // открывался и без JavaScript. Здесь фиксируем успех.
       succeed();
     });
 
     // Быстрая проверка доступности основного сервера. Ответ непрозрачный
     // (mode: no-cors), поэтому она ловит обрыв связи и таймаут, но не
-    // отличает 502 от 200 — на этот случай и работает watchdog выше.
+    // отличает 502 от 200 — на этот случай работает watchdog ниже.
     if (window.fetch && window.AbortController) {
       var ac = new AbortController();
       var probeTimer = setTimeout(function () { ac.abort(); }, 4000);
