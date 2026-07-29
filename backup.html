@@ -21,15 +21,118 @@
     <!-- SEO & Meta Tags -->
     <title> Авторские экскурсии в Токио | Tokyo Insider</title>
     <meta name="description" content="Авторские прогулки по Токио: киберпанк, дизайн, аниме-эстетика и урбанистика. Узнай изнанку Японии с инсайдером.">
-    <meta property="og:title" content="Real Tokyo Tours | Insider">
-    <meta property="og:description" content="Изнанка Токио без туристических штампов. Киберпанк, арт и правда о Японии.">
     <!-- Картинка для превью -->
     <meta property="og:image" content="https://lh3.googleusercontent.com/d/18ZPBgnm7tBOTMvYAZXT9pl6shGm7Qkqa">
     <meta property="og:type" content="website">
+    <!-- Основной адрес сайта. Этот файл отдаётся ещё и напрямую по адресу
+         туннеля notebook2.routerjp.netcraze.pro; canonical говорит поисковикам,
+         что оба адреса — одна и та же страница, и весь вес нужно отдать домену. -->
+    <link rel="canonical" href="https://tokyo-inside.art/">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <meta name="geo.region" content="JP-13">
+    <meta name="geo.placename" content="Токио">
+    <meta property="og:title" content="Авторские экскурсии в Токио | Tokyo Insider">
+    <meta property="og:description" content="Изнанка Токио без туристических штампов. Киберпанк, современное искусство, урбанистика и правда о Японии — прогулки с гидом-инсайдером.">
+    <meta property="og:url" content="https://tokyo-inside.art/">
+    <meta property="og:site_name" content="Tokyo Insider">
+    <meta property="og:locale" content="ru_RU">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Авторские экскурсии в Токио | Tokyo Insider">
+    <meta name="twitter:description" content="Изнанка Токио без туристических штампов: киберпанк, арт, урбанистика.">
+    <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/18ZPBgnm7tBOTMvYAZXT9pl6shGm7Qkqa">
 
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript">(function (m, e, t, r, i, k, a) { m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) }; m[i].l = 1 * new Date(); for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } } k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a) })(window, document, 'script', 'https://mc.webvisor.org/metrika/tag_ww.js?id=105466614', 'ym'); ym(105466614, 'init', { ssr: true, webvisor: true, trackHash: true, clickmap: true, ecommerce: "dataLayer", accurateTrackBounce: true, trackLinks: true });</script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/105466614" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+        <!-- Yandex.Metrika counter -->
+    <!-- Счётчик инициализируется только когда страница открыта напрямую.
+         Внутри iframe (сайт показывается через обёртку на tokyo-inside.art)
+         считает внешняя страница — иначе один посетитель давал бы два визита,
+         а куки внутри фрейма всё равно сторонние и блокируются браузерами.
+         Загрузка идёт со штатного mc.yandex.ru: «обходной» mc.webvisor.org
+         давно попал в фильтры блокировщиков. -->
+    <script type="text/javascript">
+        if (window.self === window.top) {
+            (function (m, e, t, r, i, k, a) { m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) }; m[i].l = 1 * new Date(); for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } } k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a) })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag_ww.js?id=105466614', 'ym');
+            ym(105466614, 'init', { webvisor: true, trackHash: true, clickmap: true, ecommerce: "dataLayer", accurateTrackBounce: true, trackLinks: true });
+        }
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/105466614" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+        <!-- Кто мы: тип бизнеса, регион, языки. Отвечает поисковику на вопрос
+         «что это за сайт» ещё до того, как React отрисует страницу. -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "TravelAgency",
+          "@id": "https://tokyo-inside.art/#org",
+          "name": "Tokyo Insider",
+          "alternateName": "Токио Инсайдер",
+          "url": "https://tokyo-inside.art/",
+          "image": "https://lh3.googleusercontent.com/d/18ZPBgnm7tBOTMvYAZXT9pl6shGm7Qkqa",
+          "description": "Авторские индивидуальные экскурсии по Токио на русском языке: киберпанк и ночная фотография, современное искусство, урбанистика нетуристического города, повседневная японская культура.",
+          "priceRange": "$160-$350",
+          "areaServed": {
+            "@type": "City",
+            "name": "Токио",
+            "address": { "@type": "PostalAddress", "addressCountry": "JP", "addressLocality": "Токио" }
+          },
+          "knowsLanguage": ["ru", "en"],
+          "sameAs": ["https://t.me/Unofficial_Tokyo_bot"],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "reservations",
+            "url": "https://t.me/Unofficial_Tokyo_bot",
+            "availableLanguage": ["ru", "en"]
+          }
+        }
+    </script>
+
+    <!-- Вопросы и ответы из блока FAQ ниже по странице. Поисковики умеют
+         показывать их прямо в выдаче раскрывающимся списком. -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "@id": "https://tokyo-inside.art/#faq",
+          "inLanguage": "ru",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Это классическая экскурсия с гидом?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Не совсем. Я не провожу лекции в стиле «посмотрите налево, это здание построено в 19 веке». Это авторские прогулки. Мы гуляем, я показываю изнанку города, объясняю, как устроено японское общество, логистика мегаполиса и почему здесь всё так, как есть. Это живой диалог и погружение в атмосферу, а не пересказ Википедии." }
+            },
+            {
+              "@type": "Question",
+              "name": "Цена указана за человека?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Нет, цена указана за всю группу целиком (фиксированная стоимость за моё время и экспертизу). Неважно, будете вы один или с семьей/друзьями (до 4-5 человек). Я не набираю сборные группы из незнакомых людей — это исключительно ваша приватная прогулка." }
+            },
+            {
+              "@type": "Question",
+              "name": "Что входит в стоимость? Кто платит за билеты?",
+              "acceptedAnswer": { "@type": "Answer", "text": "В стоимость входит только сама прогулка. Все дополнительные расходы — входные билеты (в музеи, метро, парки) и питание — оплачиваются вами отдельно. Важный нюанс: по принятой у нас практике, расходы на билеты и транспорт во время прогулки оплачиваются и за участников, и за сопровождающего (гида)." }
+            },
+            {
+              "@type": "Question",
+              "name": "Можно ли с детьми?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Формат прогулок (урбанистика, социальные проблемы, долгие пешие переходы, ночная эстетика) рассчитан на взрослую аудиторию. Детям, скорее всего, будет скучно и утомительно, так как развлекательной программы для них не предусмотрено, поэтому рекомендуется для аудитории не младше 12-14 лет." }
+            },
+            {
+              "@type": "Question",
+              "name": "Ночная прогулка: где мы заканчиваем?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Обратите внимание: маршрут «Два лица ночного Токио» заканчивается не в центре, а в спальном районе (Мусаси-Урава, Сайтама). Это необходимо для погружения в атмосферу настоящего, нетуристического жилого района. Обратно в отель вы возвращаетесь самостоятельно на поезде (это несложно)." }
+            },
+            {
+              "@type": "Question",
+              "name": "Прогулка по Комбини — это гастро-тур?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Нет. Мы можем что-то купить по ходу дела, но цель прогулки — не дегустация. Мы разбираем, как устроена логистика, почему товары лежат именно так, как работают IT-системы магазинов и как этот бизнес выглядит изнутри." }
+            },
+            {
+              "@type": "Question",
+              "name": "Я хочу посмотреть классическое искусство.",
+              "acceptedAnswer": { "@type": "Answer", "text": "В рамках услуги «Арт-консьерж» я работаю только с современным искусством, дизайном, фото и иллюстрацией. Я не являюсь экспертом в классике (гравюры, буддийские статуи) и не смогу дать вам качественный контекст по этой теме." }
+            }
+          ]
+        }
+    </script>
+
     <!-- SCHEMA.ORG JSON-LD -->
     <script type="application/ld+json">
         {
@@ -177,11 +280,228 @@
             background: linear-gradient(#130826, #130826) padding-box, linear-gradient(45deg, #00f3ff, #bd00ff) border-box;
             border: 1px solid transparent;
         }
-    </style>
+    
+        /* ===== Экран загрузки (REMASTERED: Star + Typography) ===== */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #050010;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Vignette & Grid */
+        #loader::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 0%, #050010 90%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #loader::after {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
+            background-image:
+                linear-gradient(rgba(189, 0, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.15) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: grid-move 5s linear infinite;
+            z-index: -1;
+            opacity: 0.6;
+            mask-image: radial-gradient(circle at center, black 0%, transparent 70%);
+            -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 70%);
+        }
+
+        @keyframes grid-move {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(60px); }
+        }
+
+        /* CYBER STAR */
+        .loader-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .cyber-star {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .star-core {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, #00f3ff, #bd00ff, #ff0099, #00f3ff);
+            clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
+            animation: star-spin 3s linear infinite;
+            filter: drop-shadow(0 0 20px rgba(189, 0, 255, 0.6));
+        }
+
+        .star-core::after {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            background: #050010;
+            clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
+        }
+
+        .star-inner {
+            position: absolute;
+            width: 25%;
+            height: 25%;
+            background: #fff;
+            transform: rotate(45deg);
+            animation: pulse-star 0.5s ease-in-out infinite alternate;
+            box-shadow: 0 0 20px #00f3ff;
+        }
+
+        /* Glitch Text */
+        .loader-title {
+            font-size: 42px;
+            font-weight: 900;
+            color: white;
+            font-style: italic;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 4px 4px 0px #bd00ff;
+            margin-bottom: 0px;
+            line-height: 1;
+        }
+
+        .loader-subtitle {
+            font-size: 14px;
+            color: #00f3ff;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 40px;
+            animation: blink 0.1s infinite;
+            opacity: 0.8;
+        }
+
+        /* Warning Box - Cyber Style */
+        .loader-warning {
+            background: rgba(10, 1, 24, 0.9);
+            border: 1px solid #ff0099;
+            padding: 20px 30px;
+            max-width: 420px;
+            text-align: left;
+            position: relative;
+            clip-path: polygon(
+                0 0,
+                100% 0,
+                100% calc(100% - 20px),
+                calc(100% - 20px) 100%,
+                0 100%
+            );
+            box-shadow: 0 0 30px rgba(255, 0, 153, 0.1);
+            animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards;
+        }
+
+        .loader-warning::before {
+            content: 'SYSTEM ALERT // RKN_BLOCK';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff0099;
+            color: #000;
+            font-size: 9px;
+            padding: 2px 8px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .warning-text {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .warning-text b {
+            color: #00f3ff;
+            font-weight: bold;
+        }
+
+        @keyframes star-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-star {
+            from { transform: scale(0.8) rotate(45deg); opacity: 0.5; }
+            to { transform: scale(1.2) rotate(45deg); opacity: 1; }
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.7; }
+        }
+
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .loader-title { font-size: 30px; }
+            .loader-subtitle { letter-spacing: 4px; font-size: 12px; }
+            .cyber-star { width: 90px; height: 90px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .star-core, .star-inner, .loader-subtitle, #loader::after { animation: none; }
+        }
+</style>
 </head>
 <body>
 
-    <div id="root"></div>
+        <!-- Экран загрузки (REMASTERED: Star + Typography) -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="cyber-star">
+                <div class="star-core"></div>
+                <div class="star-inner"></div>
+            </div>
+
+            <div class="loader-title">TOKYO INSIDER</div>
+            <div class="loader-subtitle">SYSTEM INITIALIZATION</div>
+
+            <div class="loader-warning">
+                <div class="warning-text">
+                    Если загрузка зависла — вероятно, <b>РКН блокирует соединение</b>.<br/>
+                    Пожалуйста, включите <b>VPN</b> для доступа к сайту.
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect, useLayoutEffect, useRef } = React;
@@ -1016,6 +1336,19 @@
             const [selectedTour, setSelectedTour] = useState(null);
             const [isClosing, setIsClosing] = useState(false);
             const timerRef = useRef(null); // Store the timer ID
+            // --- LOADER LOGIC ---
+            useEffect(() => {
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    setTimeout(() => {
+                        loader.style.opacity = '0';
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                        }, 500);
+                    }, 500); // Small delay to ensure smooth transition
+                }
+            }, []);
+
 
             // Обработка кнопки "Назад" и прокрутки страницы
             useLayoutEffect(() => {
