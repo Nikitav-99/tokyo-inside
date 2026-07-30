@@ -41,13 +41,15 @@
      Счётчик стоит именно здесь, на самом домене: внутри iframe его куки были бы
      сторонними, а такие блокирует Safari и ограничивают Chrome с Firefox — из-за
      этого визиты не доходили. Вебвизор и карта кликов отключены: записывать на
-     этой странице нечего, весь контент внутри фрейма. -->
+     этой странице нечего, весь контент внутри фрейма.
+
+     Здесь только очередь команд. Сам tag.js весит 292 КБ — больше, чем весь сайт,
+     и, качаясь наперегонки с iframe, заметно задерживал его. Поэтому скрипт
+     подключается позже, функцией loadMetrika() внизу страницы: очередь ym.a
+     дождётся его и отправит визит, ничего не теряется. -->
 <script type="text/javascript">
-(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-m[i].l=1*new Date();
-for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments) };
+window.ym.l = 1 * new Date();
 
 ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accurateTrackBounce: true });
 </script>
@@ -56,10 +58,12 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
 
 <link rel="preconnect" href="https://notebook2.routerjp.netcraze.pro">
 <link rel="dns-prefetch" href="https://notebook2.routerjp.netcraze.pro">
-<link rel="preconnect" href="https://mc.yandex.ru">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+
+<!-- Шрифт лежит рядом, на своём домене: обращения к fonts.googleapis.com больше нет,
+     а значит нет лишнего DNS, TLS и блокирующего CSS. Preload запускает загрузку сразу,
+     не дожидаясь разбора стилей. -->
+<link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jetbrains-mono-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 
 <!-- Кто мы: тип бизнеса, регион, языки. Именно этот блок отвечает
      на вопрос поисковика «что это за сайт». -->
@@ -279,13 +283,34 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
 </script>
 
 <style>
+  /* Вариативный JetBrains Mono: один файл покрывает все толщины от 100 до 800.
+     font-display: block — пока шрифт не готов, текст не рисуется вовсе и затем
+     появляется сразу фирменным. Подмены системным моно не будет ни на кадр. */
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: block;
+    src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: block;
+    src: url('/fonts/jetbrains-mono-cyrillic.woff2') format('woff2');
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+
   html, body {
     height: 100%;
     margin: 0;
     padding: 0;
     background-color: #050010;
     color: white;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow: hidden;
   }
 
@@ -586,6 +611,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
     var current = 0;
     var settled = false;
     var watchdog = null;
+    var metrikaLoaded = false;
 
     function stopWatchdog() {
       if (watchdog) {
@@ -593,6 +619,21 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
         watchdog = null;
       }
     }
+
+    // Подключаем счётчик, когда сайт уже показан, чтобы его 292 КБ не отнимали
+    // канал у загрузки iframe. Команды к этому моменту лежат в очереди ym.a.
+    function loadMetrika() {
+      if (metrikaLoaded) return;
+      metrikaLoaded = true;
+      var s = document.createElement('script');
+      s.async = 1;
+      s.src = 'https://mc.yandex.ru/metrika/tag.js';
+      document.head.appendChild(s);
+    }
+
+    // Страховка: сайт мог не отрисоваться и сигнал не прийти — визит всё равно
+    // должен попасть в статистику.
+    setTimeout(loadMetrika, 10000);
 
     // Источник ответил: убираем экран загрузки и, если открыт снимок,
     // помечаем это для админа.
@@ -605,6 +646,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
       if (SOURCES[current].backup) {
         note.classList.add('show');
       }
+      loadMetrika();
     }
 
     // Переход к следующему источнику.
