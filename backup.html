@@ -1379,24 +1379,27 @@
             const timerRef = useRef(null); // Store the timer ID
             // --- LOADER LOGIC ---
             useEffect(() => {
+                const inFrame = window.self !== window.top;
+
                 // Сообщаем обёртке на tokyo-inside.art, что страница отрисована
-                // и её экран загрузки можно убирать.
-                const notifyParent = () => {
-                    if (window.self === window.top) return;
+                // и её экран загрузки можно убирать. Сигнал уходит сразу: ждать
+                // нечего, контент уже готов.
+                if (inFrame) {
                     try {
                         window.parent.postMessage({ type: 'tokyo-inside-ready' }, '*');
                     } catch (e) { /* обёртка на другом домене — не критично */ }
-                };
-
-                // Сигнал уходит сразу: ждать, пока догорит свой экран, незачем.
-                // Экраны в обёртке и здесь визуально идентичны, поэтому неважно,
-                // какой из них виден в момент перехода — важно лишь, что контент
-                // под ними готов. Раньше сигнал шёл через два таймера, и это
-                // добавляло ровно секунду ожидания на пустом месте.
-                notifyParent();
+                }
 
                 const loader = document.getElementById('loader');
-                if (loader) {
+                if (!loader) return;
+
+                if (inFrame) {
+                    // Внутри обёртки свой экран не показываем совсем. Снаружи уже
+                    // висит такой же, он гаснет по сигналу выше — и если этот
+                    // оставить, он проявится сразу после того, как погас внешний,
+                    // то есть посетитель увидит вторую загрузку подряд.
+                    loader.style.display = 'none';
+                } else {
                     setTimeout(() => {
                         loader.style.opacity = '0';
                         setTimeout(() => {
