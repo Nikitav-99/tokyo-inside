@@ -607,25 +607,46 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
       }
     }
 
-    // Переход к следующему источнику. Последний оставляем как есть:
-    // даже неудачный он лучше пустого экрана.
+    // Переход к следующему источнику.
     function fail() {
       if (settled) return;
       stopWatchdog();
-      if (current >= SOURCES.length - 1) {
-        succeed();
-        return;
-      }
+
+      // Резервы кончились: не ответил никто. Экран загрузки оставляем —
+      // на нём как раз написано, что при зависшей загрузке стоит включить VPN,
+      // а это самая вероятная причина, когда молчат сразу все адреса.
+      if (current >= SOURCES.length - 1) return;
+
       current++;
-      stopWatchdog();
       watchdog = setTimeout(fail, 8000);
       frame.src = SOURCES[current].url;
     }
 
-    frame.addEventListener('load', function () {
-      // Первый источник проставлен прямо в разметке, чтобы сайт
-      // открывался и без JavaScript. Здесь фиксируем успех.
+    // Экран загрузки гасим по сигналу от самого сайта, а не по событию load.
+    // Load означает лишь, что скачан HTML, — React в этот момент ещё не отрисовал
+    // страницу. Раньше из-за этого внешний экран исчезал слишком рано, и посетитель
+    // видел второй экран загрузки, уже внутренний: отсюда были вспышка и рывок
+    // анимации на стыке.
+    window.addEventListener('message', function (e) {
+      if (!e.data || e.data.type !== 'tokyo-inside-ready') return;
+
+      // Слушаем только тот адрес, который сами же и загрузили
+      var expected;
+      try {
+        expected = new URL(SOURCES[current].url, location.href).origin;
+      } catch (err) {
+        return;
+      }
+      if (e.origin !== expected) return;
+
       succeed();
+    });
+
+    frame.addEventListener('load', function () {
+      // HTML доехал — значит источник живой, и переключаться на резерв больше
+      // не нужно. Медленный рендер резервом не лечится: там тот же React,
+      // тот же Babel и то же устройство.
+      stopWatchdog();
     });
 
     // Быстрая проверка доступности основного сервера. Ответ непрозрачный
