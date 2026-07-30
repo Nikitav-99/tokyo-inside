@@ -1379,14 +1379,28 @@
             const timerRef = useRef(null); // Store the timer ID
             // --- LOADER LOGIC ---
             useEffect(() => {
+                // Сообщаем обёртке на tokyo-inside.art, что страница отрисована
+                // и её экран загрузки можно убирать. Отправляем строго после того,
+                // как погас свой экран: иначе внешний исчезнет, пока внутренний
+                // ещё виден, и анимация звезды дёрнется.
+                const notifyParent = () => {
+                    if (window.self === window.top) return;
+                    try {
+                        window.parent.postMessage({ type: 'tokyo-inside-ready' }, '*');
+                    } catch (e) { /* обёртка на другом домене — не критично */ }
+                };
+
                 const loader = document.getElementById('loader');
                 if (loader) {
                     setTimeout(() => {
                         loader.style.opacity = '0';
                         setTimeout(() => {
                             loader.style.display = 'none';
+                            notifyParent();
                         }, 500);
                     }, 500); // Small delay to ensure smooth transition
+                } else {
+                    notifyParent();
                 }
             }, []);
 
