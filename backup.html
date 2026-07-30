@@ -304,6 +304,37 @@
                 background: #555;
             }
 
+                /* Тот же скроллбар, но для всей страницы, а не только для модалки.
+           Цвета и размеры взяты из .custom-scrollbar выше без изменений. */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0118;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+        ::-webkit-scrollbar-corner {
+            background: #0a0118;
+        }
+
+        /* Firefox: префиксные ::-webkit-* он не понимает, поэтому здесь
+           стандартные свойства. Градиенты в них недоступны, только сплошной цвет. */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: #333 #0a0118;
+        }
+
         /* Утилитный класс для предотвращения моргания градиента */
         .gradient-text-hover {
             background-clip: text;
