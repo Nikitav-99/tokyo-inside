@@ -314,7 +314,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
     overflow: hidden;
   }
 
-  #site {
+  #site, .site-frame {
     position: fixed;
     top: 0;
     left: 0;
@@ -604,13 +604,21 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
       { url: 'https://sparkly-nasturtium-ec39c2.netlify.app/', backup: true }
     ];
 
-    var frame = document.getElementById('site');
     var loader = document.getElementById('loader');
     var note = document.getElementById('fallback-note');
 
+    // Каждый источник грузится в свой iframe: frames[i] — фрейм источника i.
+    // Раньше резерв подставлялся в тот же iframe, и это давало гонку: пока
+    // резерв грузился, в фрейме ещё жил основной сайт, дорисовывался и слал
+    // сигнал готовности — а обёртка уже ждала сигнала от резерва и отбрасывала
+    // его. В итоге показывался бэкап, хотя живой сайт был готов, а если очередь
+    // доходила до Netlify (в РФ не открывается) — загрузка висела вечно.
+    // Теперь предыдущий фрейм не трогаем: побеждает тот, кто первым отрисовался.
+    var frames = [document.getElementById('site')];
+    var loaded = [false];
+
     var current = 0;
     var settled = false;
-    var frameLoaded = false;
     var watchdog = null;
     var metrikaLoaded = false;
 
@@ -636,21 +644,46 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
     // должен попасть в статистику.
     setTimeout(loadMetrika, 10000);
 
-    // Источник ответил: убираем экран загрузки и, если открыт снимок,
-    // помечаем это для админа.
-    function succeed() {
+    function originOf(i) {
+      try {
+        return new URL(SOURCES[i].url, location.href).origin;
+      } catch (err) {
+        return null;
+      }
+    }
+
+    // Источник i отрисовался: оставляем только его фрейм, убираем экран
+    // загрузки и, если открыт снимок, помечаем это для админа.
+    function succeed(i) {
       if (settled) return;
       settled = true;
       stopWatchdog();
+      for (var j = 0; j < frames.length; j++) {
+        if (j !== i && frames[j]) {
+          frames[j].parentNode.removeChild(frames[j]);
+          frames[j] = null;
+        }
+      }
       loader.style.opacity = '0';
       setTimeout(function () { loader.style.display = 'none'; }, 400);
-      if (SOURCES[current].backup) {
+      if (SOURCES[i].backup) {
         note.classList.add('show');
       }
       loadMetrika();
     }
 
-    // Переход к следующему источнику.
+    // Событие load значит лишь, что скачаны HTML и ресурсы; React после него
+    // ещё отрисовывает страницу. Если сигнал так и не пришёл (например, туннель
+    // отдал страницу ошибки 502), через 15 секунд подключаем следующий источник.
+    // Загрузившийся фрейм при этом остаётся и может ещё успеть первым.
+    function onFrameLoad(i) {
+      loaded[i] = true;
+      if (settled || i !== current) return;
+      stopWatchdog();
+      watchdog = setTimeout(fail, 15000);
+    }
+
+    // Подключаем следующий источник в отдельном фрейме, не трогая предыдущие.
     function fail() {
       if (settled) return;
       stopWatchdog();
@@ -661,8 +694,18 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
       if (current >= SOURCES.length - 1) return;
 
       current++;
+      var i = current;
+      var f = document.createElement('iframe');
+      f.className = 'site-frame';
+      f.title = frames[0].title;
+      f.setAttribute('allow', frames[0].getAttribute('allow'));
+      f.setAttribute('referrerpolicy', frames[0].getAttribute('referrerpolicy'));
+      f.addEventListener('load', function () { onFrameLoad(i); });
+      f.src = SOURCES[i].url;
+      loader.parentNode.insertBefore(f, loader);
+      frames[i] = f;
+      loaded[i] = false;
       watchdog = setTimeout(fail, 8000);
-      frame.src = SOURCES[current].url;
     }
 
     // Экран загрузки гасим по сигналу от самого сайта, а не по событию load.
@@ -673,25 +716,17 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
     window.addEventListener('message', function (e) {
       if (!e.data || e.data.type !== 'tokyo-inside-ready') return;
 
-      // Слушаем только тот адрес, который сами же и загрузили
-      var expected;
-      try {
-        expected = new URL(SOURCES[current].url, location.href).origin;
-      } catch (err) {
-        return;
+      // Сигнал принимаем только от наших фреймов и только с того адреса,
+      // который в этот фрейм загружали.
+      for (var i = 0; i < frames.length; i++) {
+        if (frames[i] && frames[i].contentWindow === e.source && e.origin === originOf(i)) {
+          succeed(i);
+          return;
+        }
       }
-      if (e.origin !== expected) return;
-
-      succeed();
     });
 
-    frame.addEventListener('load', function () {
-      // HTML доехал — значит источник живой, и переключаться на резерв больше
-      // не нужно. Медленный рендер резервом не лечится: там тот же React,
-      // тот же Babel и то же устройство.
-      frameLoaded = true;
-      stopWatchdog();
-    });
+    frames[0].addEventListener('load', function () { onFrameLoad(0); });
 
     // Проверка доступности основного сервера. Ответ непрозрачный
     // (mode: no-cors), поэтому она ловит обрыв связи и таймаут, но не
@@ -709,7 +744,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
           clearTimeout(probeTimer);
           // Сервер ответил, значит он жив и просто медленно отдаёт страницу
           // (целиком она грузится до 12 секунд). Даём iframe время догрузиться.
-          if (!settled && !frameLoaded && current === 0) {
+          if (!settled && !loaded[0] && current === 0) {
             stopWatchdog();
             watchdog = setTimeout(fail, 25000);
           }
@@ -717,7 +752,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
         .catch(function () {
           clearTimeout(probeTimer);
           // Если iframe уже загрузился, сайт жив, а упала только проба.
-          if (!settled && !frameLoaded && current === 0) fail();
+          if (!settled && !loaded[0] && current === 0) fail();
         });
     }
 
