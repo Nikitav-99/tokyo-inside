@@ -778,14 +778,22 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
     // занимает около 3 секунд, первый байт приходит через 3–4. Поэтому
     // таймаут пробы 10 секунд: при прежних 4 живой сайт то и дело
     // уходил на резерв.
+    // Проба идёт на отдельный адрес (?probe=...), а не на тот же, что грузит
+    // iframe: Firefox выстраивал два запроса к одному URL в очередь, и iframe
+    // ждал, пока проба не оборвётся по таймауту. Журнал показал ровно это:
+    // проба висела 10 секунд, а iframe загрузился через 6 секунд после её обрыва.
+    // Сервер бота отбрасывает query-строку и отдаёт ту же страницу.
     if (window.fetch && window.AbortController) {
       var ac = new AbortController();
       var probeTimer = setTimeout(function () { ac.abort(); }, 10000);
+      var probeUrl = SOURCES[0].url + '?probe=' + Date.now();
 
-      fetch(SOURCES[0].url, { mode: 'no-cors', cache: 'no-store', signal: ac.signal })
+      fetch(probeUrl, { mode: 'no-cors', cache: 'no-store', signal: ac.signal })
         .then(function () {
           clearTimeout(probeTimer);
           log('проба: сервер ответил');
+          // Заголовки получены, тело не нужно: не качаем страницу второй раз.
+          try { ac.abort(); } catch (e) { /* уже завершено */ }
           // Сервер ответил, значит он жив и просто медленно отдаёт страницу
           // (целиком она грузится до 12 секунд). Даём iframe время догрузиться.
           if (!settled && !loaded[0] && current === 0) {
