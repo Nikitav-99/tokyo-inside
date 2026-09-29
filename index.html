@@ -720,11 +720,33 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
       // который в этот фрейм загружали.
       for (var i = 0; i < frames.length; i++) {
         if (frames[i] && frames[i].contentWindow === e.source && e.origin === originOf(i)) {
-          succeed(i);
+          onReady(i);
           return;
         }
       }
     });
+
+    // Живой сайт важнее снимка: там актуальные цены. Резерв с GitHub Pages
+    // отрисовывается за 2–3 секунды, а основной сервер отдаёт страницу через
+    // туннель секунд за 7, и дольше, если облако Netcraze подсунуло зависший
+    // адрес. Поэтому готовый резерв не показываем сразу, а ещё до 10 секунд
+    // ждём основной сайт. Без ожидания обходимся, только если основной сервер
+    // точно недоступен: проба получила сетевую ошибку, а не таймаут.
+    var PRIMARY_GRACE = 10000;
+    var primaryDown = false;
+    var pendingBackup = null;
+
+    function onReady(i) {
+      if (settled) return;
+      if (i === 0 || primaryDown || !frames[0]) {
+        succeed(i);
+        return;
+      }
+      if (pendingBackup !== null) return;
+      pendingBackup = i;
+      stopWatchdog();
+      setTimeout(function () { succeed(pendingBackup); }, PRIMARY_GRACE);
+    }
 
     frames[0].addEventListener('load', function () { onFrameLoad(0); });
 
@@ -749,8 +771,14 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
             watchdog = setTimeout(fail, 25000);
           }
         })
-        .catch(function () {
+        .catch(function (err) {
           clearTimeout(probeTimer);
+          // Сетевая ошибка, а не наш таймаут: сервер точно недоступен,
+          // и ждать его после готовности резерва незачем.
+          if (!err || err.name !== 'AbortError') {
+            primaryDown = true;
+            if (pendingBackup !== null) succeed(pendingBackup);
+          }
           // Если iframe уже загрузился, сайт жив, а упала только проба.
           if (!settled && !loaded[0] && current === 0) fail();
         });
