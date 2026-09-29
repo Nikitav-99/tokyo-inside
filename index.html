@@ -622,6 +622,17 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
     var watchdog = null;
     var metrikaLoaded = false;
 
+    // Журнал в консоль: по нему видно, почему открылся тот или иной источник.
+    // Время — секунды от начала работы обёртки.
+    var T0 = Date.now();
+    function log() {
+      try {
+        var args = ['[обёртка ' + ((Date.now() - T0) / 1000).toFixed(1) + 'с]'];
+        for (var k = 0; k < arguments.length; k++) args.push(arguments[k]);
+        console.info.apply(console, args);
+      } catch (e) { /* консоль недоступна — не критично */ }
+    }
+
     function stopWatchdog() {
       if (watchdog) {
         clearTimeout(watchdog);
@@ -656,6 +667,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
     // загрузки и, если открыт снимок, помечаем это для админа.
     function succeed(i) {
       if (settled) return;
+      log('показываю источник', i, SOURCES[i].url);
       settled = true;
       stopWatchdog();
       for (var j = 0; j < frames.length; j++) {
@@ -677,6 +689,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
     // отдал страницу ошибки 502), через 15 секунд подключаем следующий источник.
     // Загрузившийся фрейм при этом остаётся и может ещё успеть первым.
     function onFrameLoad(i) {
+      log('load фрейма', i);
       loaded[i] = true;
       if (settled || i !== current) return;
       stopWatchdog();
@@ -695,6 +708,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
 
       current++;
       var i = current;
+      log('подключаю резерв', i, SOURCES[i].url);
       var f = document.createElement('iframe');
       f.className = 'site-frame';
       f.title = frames[0].title;
@@ -720,10 +734,16 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
       // который в этот фрейм загружали.
       for (var i = 0; i < frames.length; i++) {
         if (frames[i] && frames[i].contentWindow === e.source && e.origin === originOf(i)) {
+          log('сигнал готовности от источника', i);
           onReady(i);
           return;
         }
       }
+      var srcIdx = -1;
+      for (var j = 0; j < frames.length; j++) {
+        if (frames[j] && frames[j].contentWindow === e.source) srcIdx = j;
+      }
+      log('сигнал отброшен: origin', e.origin, 'фрейм', srcIdx);
     });
 
     // Живой сайт важнее снимка: там актуальные цены. Резерв с GitHub Pages
@@ -743,6 +763,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
         return;
       }
       if (pendingBackup !== null) return;
+      log('резерв готов, жду основной сайт ещё', PRIMARY_GRACE / 1000, 'с');
       pendingBackup = i;
       stopWatchdog();
       setTimeout(function () { succeed(pendingBackup); }, PRIMARY_GRACE);
@@ -764,6 +785,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
       fetch(SOURCES[0].url, { mode: 'no-cors', cache: 'no-store', signal: ac.signal })
         .then(function () {
           clearTimeout(probeTimer);
+          log('проба: сервер ответил');
           // Сервер ответил, значит он жив и просто медленно отдаёт страницу
           // (целиком она грузится до 12 секунд). Даём iframe время догрузиться.
           if (!settled && !loaded[0] && current === 0) {
@@ -773,6 +795,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
         })
         .catch(function (err) {
           clearTimeout(probeTimer);
+          log('проба: ошибка', err && err.name, err && err.message);
           // Сетевая ошибка, а не наш таймаут: сервер точно недоступен,
           // и ждать его после готовности резерва незачем.
           if (!err || err.name !== 'AbortError') {
@@ -784,6 +807,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
         });
     }
 
+    log('старт, основной источник', SOURCES[0].url);
     watchdog = setTimeout(fail, 15000);
   })();
 </script>
