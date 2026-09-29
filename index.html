@@ -596,12 +596,21 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
 
 <script>
   (function () {
-    // Порядок резервов: живой сайт с актуальными ценами, затем снимок
-    // на этом же домене, затем внешняя копия.
+    // Порядок источников: живой сайт с актуальными ценами, повторная попытка
+    // живого сайта, затем снимок на этом же домене, затем внешняя копия.
+    // wait — сколько ждать источник, прежде чем подключать следующий.
+    //
+    // Повторная попытка нужна из-за облака Netcraze: оно раздаёт несколько
+    // адресов, и запрос iframe иногда попадает на зависший. Журнал Chrome:
+    // проба ответила за 3 секунды, а iframe висел 30 и получил страницу ошибки.
+    // Новый запрос (URL другой, чтобы браузер не пристроил его в очередь
+    // к зависшему) идёт новым соединением и обычно доходит секунд за 6.
+    var PRIMARY = 'https://notebook2.routerjp.netcraze.pro/';
     var SOURCES = [
-      { url: 'https://notebook2.routerjp.netcraze.pro/', backup: false },
-      { url: '/backup.html', backup: true },
-      { url: 'https://sparkly-nasturtium-ec39c2.netlify.app/', backup: true }
+      { url: PRIMARY, backup: false },
+      { url: PRIMARY, backup: false, retry: true, wait: 12000 },
+      { url: '/backup.html', backup: true, wait: 8000 },
+      { url: 'https://sparkly-nasturtium-ec39c2.netlify.app/', backup: true, wait: 8000 }
     ];
 
     var loader = document.getElementById('loader');
@@ -707,19 +716,22 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
       if (current >= SOURCES.length - 1) return;
 
       current++;
+      // Сервер точно недоступен — повторять попытку живого сайта незачем.
+      while (primaryDown && !SOURCES[current].backup && current < SOURCES.length - 1) current++;
       var i = current;
-      log('подключаю резерв', i, SOURCES[i].url);
+      var url = SOURCES[i].retry ? SOURCES[i].url + '?retry=' + Date.now() : SOURCES[i].url;
+      log(SOURCES[i].backup ? 'подключаю резерв' : 'повторная попытка основного сайта', i, url);
       var f = document.createElement('iframe');
       f.className = 'site-frame';
       f.title = frames[0].title;
       f.setAttribute('allow', frames[0].getAttribute('allow'));
       f.setAttribute('referrerpolicy', frames[0].getAttribute('referrerpolicy'));
       f.addEventListener('load', function () { onFrameLoad(i); });
-      f.src = SOURCES[i].url;
+      f.src = url;
       loader.parentNode.insertBefore(f, loader);
       frames[i] = f;
       loaded[i] = false;
-      watchdog = setTimeout(fail, 8000);
+      watchdog = setTimeout(fail, SOURCES[i].wait);
     }
 
     // Экран загрузки гасим по сигналу от самого сайта, а не по событию load.
@@ -758,7 +770,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
 
     function onReady(i) {
       if (settled) return;
-      if (i === 0 || primaryDown || !frames[0]) {
+      if (!SOURCES[i].backup || primaryDown) {
         succeed(i);
         return;
       }
@@ -794,11 +806,12 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
           log('проба: сервер ответил');
           // Заголовки получены, тело не нужно: не качаем страницу второй раз.
           try { ac.abort(); } catch (e) { /* уже завершено */ }
-          // Сервер ответил, значит он жив и просто медленно отдаёт страницу
-          // (целиком она грузится до 12 секунд). Даём iframe время догрузиться.
+          // Сервер ответил, значит он жив. Обычно iframe загружается в пределах
+          // 3 секунд после пробы; если его нет и через 8 — его запрос, скорее
+          // всего, завис на плохом адресе, и пора делать повторную попытку.
           if (!settled && !loaded[0] && current === 0) {
             stopWatchdog();
-            watchdog = setTimeout(fail, 25000);
+            watchdog = setTimeout(fail, 8000);
           }
         })
         .catch(function (err) {
