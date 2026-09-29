@@ -700,6 +700,7 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
     function onFrameLoad(i) {
       log('load фрейма', i);
       loaded[i] = true;
+      extendGraceOnPrimaryLoad(i);
       if (settled || i !== current) return;
       stopWatchdog();
       watchdog = setTimeout(fail, 15000);
@@ -778,7 +779,23 @@ ym(105466614, 'init', { clickmap: false, webvisor: false, trackLinks: true, accu
       log('резерв готов, жду основной сайт ещё', PRIMARY_GRACE / 1000, 'с');
       pendingBackup = i;
       stopWatchdog();
-      setTimeout(function () { succeed(pendingBackup); }, PRIMARY_GRACE);
+      graceTimer = setTimeout(function () { succeed(pendingBackup); }, PRIMARY_GRACE);
+    }
+
+    // Основной сайт догрузился, пока мы ждали: сигнал готовности обычно
+    // приходит через 0,1–0,4 секунды после load. Журнал Chrome: load на 30,1 с,
+    // а ожидание кончилось на 30,5 с — показали бэкап за миг до готовности.
+    // Поэтому продлеваем ожидание ещё на 3 секунды.
+    var PRIMARY_LOAD_EXTRA = 3000;
+    var graceTimer = null;
+    var graceExtended = false;
+
+    function extendGraceOnPrimaryLoad(i) {
+      if (settled || pendingBackup === null || SOURCES[i].backup || graceExtended) return;
+      graceExtended = true;
+      log('основной сайт загрузился, продлеваю ожидание на', PRIMARY_LOAD_EXTRA / 1000, 'с');
+      clearTimeout(graceTimer);
+      graceTimer = setTimeout(function () { succeed(pendingBackup); }, PRIMARY_LOAD_EXTRA);
     }
 
     frames[0].addEventListener('load', function () { onFrameLoad(0); });
